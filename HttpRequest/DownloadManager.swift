@@ -8,8 +8,57 @@
 
 import Foundation
 
+// MARK: - DownloadManager class, handle all background downloads
 class DownloadManager: NSObject {
-
+    
+    // MARK: - Properties
+    /**
+     Network request queue
+     */
+    dynamic private(set) lazy var queue: NSOperationQueue = {
+        let maxOperationCount = 5
+        let queue = NSOperationQueue()
+        queue.maxConcurrentOperationCount = maxOperationCount
+        return queue
+    }()
+    
+    // MARK: - Initializer
+    override init() {
+        super.init()
+        self.addObserver(self, forKeyPath: "queue.operations", options: NSKeyValueObservingOptions.New, context: nil)
+    }
+    
+    /**
+     Cancel all download tasks
+     */
+    func cancelAllDownloadTasks() {
+        self.queue.cancelAllOperations()
+    }
+    
+    deinit {
+        self.removeObserver(self, forKeyPath: "queue.operations")
+    }
+    
+    // MARK: - Key-value Observer
+    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+        if keyPath == "queue.operations" {
+            log.debug("Number of downloading task: \(self.queue.operations.count)")
+        }
+    }
+    
+    /**
+     HttpRequest shared instance
+     */
+    class func sharedInstance() -> DownloadManager {
+        struct Singleton {
+            static let instance = DownloadManager()
+        }
+        return Singleton.instance
+    }
+    
+    /**
+     Get temporary download folder url
+     */
     class func downloadFolderUrl() -> NSURL? {
         let folderPathUrl = NSURL(fileURLWithPath: NSTemporaryDirectory()).URLByAppendingPathComponent("download")
         
