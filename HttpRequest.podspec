@@ -10,9 +10,10 @@ Pod::Spec.new do |s|
     s.author = { "Casey Law" => "casey@lomotif.com" }
     s.homepage = "http://ww.lomotif.com"
     s.source = { :git => "https://github.com/Lomotif/lomotif-ios-httprequest.git", :tag => "#{s.version}"}
-    s.framework = "UIKit"
+    s.framework = 'Foundation'
     s.dependency 'Alamofire'
     s.dependency 'AlamofireImage'
-    s.source_files = "HttpRequest/**/*.{swift}"
+    s.source_files = "HttpRequest/*.{swift}"
+    s.module_name = 'HttpRequest'
 
 end
