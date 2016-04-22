@@ -8,6 +8,7 @@
 
 import Foundation
 import Alamofire
+import XCGLogger
 
 // MARK: - typealias
 public typealias HttpHeaders = [String: String]
@@ -15,6 +16,21 @@ public typealias HttpBody = [String: AnyObject]
 public typealias Request = Alamofire.Request
 public typealias Method = Alamofire.Method
 public typealias URLStringConvertible = Alamofire.URLStringConvertible
+
+// XCGLogger
+let log: XCGLogger = {
+    let instance = XCGLogger.defaultInstance()
+    instance.xcodeColorsEnabled = true // Or set the XcodeColors environment variable in your scheme to YES
+    instance.xcodeColors = [
+        .Verbose: .lightGrey,
+        .Debug: .darkGrey,
+        .Info: .darkGreen,
+        .Warning: .orange,
+        .Error: XCGLogger.XcodeColor(fg: UIColor.redColor()), // Optionally use a UIColor
+        .Severe: XCGLogger.XcodeColor(fg: (255, 255, 255), bg: (255, 0, 0)) // Optionally use RGB values directly
+    ]
+    return instance
+}()
 
 // MARK: - HttpRequest which handles all the http request call
 public class HttpRequest: NSObject {
@@ -69,6 +85,7 @@ public class HttpRequest: NSObject {
         let encoding = method == .GET ? ParameterEncoding.URL : ParameterEncoding.JSON
         var requestHeaders: HttpHeaders = self.buildRequestHeader(requiredAuthorization)
         requestHeaders.append(headers)
+        log.debug("Url: \(URLString), Method: \(method) \nHeader: \(requestHeaders)\nParameters: \(body)")
         return Alamofire.request(method, URLString, parameters: body, encoding: encoding, headers: requestHeaders)
     }
     

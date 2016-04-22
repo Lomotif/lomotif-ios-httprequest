@@ -4,6 +4,7 @@ use_frameworks!
 def shared_pods
     pod 'Alamofire'
     pod 'AlamofireImage'
+    pod 'XCGLogger'
 end
 
 target 'HttpRequest' do

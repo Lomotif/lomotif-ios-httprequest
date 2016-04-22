@@ -86,8 +86,10 @@ strip_invalid_archs() {
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "Pods-HttpRequest/Alamofire.framework"
   install_framework "Pods-HttpRequest/AlamofireImage.framework"
+  install_framework "Pods-HttpRequest/XCGLogger.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "Pods-HttpRequest/Alamofire.framework"
   install_framework "Pods-HttpRequest/AlamofireImage.framework"
+  install_framework "Pods-HttpRequest/XCGLogger.framework"
 fi
