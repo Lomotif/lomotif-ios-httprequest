@@ -2,8 +2,8 @@ Pod::Spec.new do |s|
 
     s.platform = :ios
     s.ios.deployment_target = '8.0'
-    s.name = "RWPickFlavor"
-    s.summary = "RWPickFlavor lets a user select an ice cream flavor."
+    s.name = "HttpRequest"
+    s.summary = "HttpRequest handles Lomotif iOS http request."
     s.requires_arc = true
     s.version = "0.1.0"
     s.license = { :type => "MIT", :file => "LICENSE" }
@@ -14,4 +14,5 @@ Pod::Spec.new do |s|
     s.dependency 'Alamofire'
     s.dependency 'AlamofireImage'
     s.source_files = "HttpRequest/**/*.{swift}"
+
 end
