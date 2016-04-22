@@ -76,8 +76,9 @@ public class HttpRequest: NSObject {
      Make http request
      
      - parameter method: Request method
-     - parameter url: Request url
-     - parameter parameters: Request body
+     - parameter URLString: Request url
+     - parameter headers: Request body
+     - parameter body: Request body
      - parameter requiredAuthorization: Is the request call authenticated? Default value is false
      - returns: A request instance
      */
@@ -87,6 +88,58 @@ public class HttpRequest: NSObject {
         requestHeaders.append(headers)
         log.debug("Url: \(URLString), Method: \(method) \nHeader: \(requestHeaders)\nParameters: \(body)")
         return Alamofire.request(method, URLString, parameters: body, encoding: encoding, headers: requestHeaders)
+    }
+    
+    /**
+     Make GET request with url, headers and body
+     
+     - parameter URLString: Request url
+     - parameter headers: Request body
+     - parameter body: Request body
+     - parameter requiredAuthorization: Is the request call authenticated? Default value is false
+     - returns: A request instance
+     */
+    public class func GET(URLString: URLStringConvertible, headers: HttpHeaders? = nil, body: HttpBody? = nil, requiredAuthorization: Bool = false) -> Request {
+        return request(.GET, URLString, body: body, headers: headers, requiredAuthorization: requiredAuthorization)
+    }
+    
+    /**
+     Make POST request with url, headers and body
+     
+     - parameter URLString: Request url
+     - parameter headers: Request body
+     - parameter body: Request body
+     - parameter requiredAuthorization: Is the request call authenticated? Default value is false
+     - returns: A request instance
+     */
+    public class func POST(URLString: URLStringConvertible, headers: HttpHeaders? = nil, body: HttpBody? = nil, requiredAuthorization: Bool = false) -> Request {
+        return request(.POST, URLString, body: body, headers: headers, requiredAuthorization: requiredAuthorization)
+    }
+    
+    /**
+     Make PUT request with url, headers and body
+     
+     - parameter URLString: Request url
+     - parameter headers: Request body
+     - parameter body: Request body
+     - parameter requiredAuthorization: Is the request call authenticated? Default value is false
+     - returns: A request instance
+     */
+    public class func PUT(URLString: URLStringConvertible, headers: HttpHeaders? = nil, body: HttpBody? = nil, requiredAuthorization: Bool = false) -> Request {
+        return request(.PUT, URLString, body: body, headers: headers, requiredAuthorization: requiredAuthorization)
+    }
+    
+    /**
+     Make DELETE request with url, headers and body
+     
+     - parameter URLString: Request url
+     - parameter headers: Request body
+     - parameter body: Request body
+     - parameter requiredAuthorization: Is the request call authenticated? Default value is false
+     - returns: A request instance
+     */
+    public class func DELETE(URLString: URLStringConvertible, headers: HttpHeaders? = nil, body: HttpBody? = nil, requiredAuthorization: Bool = false) -> Request {
+        return request(.DELETE, URLString, body: body, headers: headers, requiredAuthorization: requiredAuthorization)
     }
     
     /**
