@@ -12,6 +12,8 @@
 		C9C1E9721CCAAD5100D361A8 /* HttpRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = C9C1E9711CCAAD5100D361A8 /* HttpRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C9C1E9791CCAAD5100D361A8 /* HttpRequest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9C1E96E1CCAAD5000D361A8 /* HttpRequest.framework */; };
 		C9C1E97E1CCAAD5100D361A8 /* HttpRequestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C1E97D1CCAAD5100D361A8 /* HttpRequestTests.swift */; };
+		C9C1E98A1CCACD5900D361A8 /* HttpRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C1E9891CCACD5900D361A8 /* HttpRequest.swift */; };
+		C9C1E98E1CCAD40D00D361A8 /* DictionaryExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C1E98D1CCAD40D00D361A8 /* DictionaryExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +36,8 @@
 		C9C1E9781CCAAD5100D361A8 /* HttpRequestTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HttpRequestTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9C1E97D1CCAAD5100D361A8 /* HttpRequestTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpRequestTests.swift; sourceTree = "<group>"; };
 		C9C1E97F1CCAAD5100D361A8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C9C1E9891CCACD5900D361A8 /* HttpRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpRequest.swift; sourceTree = "<group>"; };
+		C9C1E98D1CCAD40D00D361A8 /* DictionaryExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DictionaryExtension.swift; sourceTree = "<group>"; };
 		DAF8BAF2C0CA75EB62892ADC /* Pods-HttpRequestTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HttpRequestTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-HttpRequestTests/Pods-HttpRequestTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED41D24EFAF7CB96DEDD6BDA /* Pods_HttpRequest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HttpRequest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA2E472E703AD4DF5748CB29 /* Pods-HttpRequest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HttpRequest.release.xcconfig"; path = "Pods/Target Support Files/Pods-HttpRequest/Pods-HttpRequest.release.xcconfig"; sourceTree = "<group>"; };
@@ -95,6 +99,8 @@
 			isa = PBXGroup;
 			children = (
 				C9C1E9711CCAAD5100D361A8 /* HttpRequest.h */,
+				C9C1E9891CCACD5900D361A8 /* HttpRequest.swift */,
+				C9C1E98D1CCAD40D00D361A8 /* DictionaryExtension.swift */,
 				C9C1E9731CCAAD5100D361A8 /* Info.plist */,
 			);
 			path = HttpRequest;
@@ -309,6 +315,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C9C1E98A1CCACD5900D361A8 /* HttpRequest.swift in Sources */,
+				C9C1E98E1CCAD40D00D361A8 /* DictionaryExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -426,6 +434,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2EDB61B582A5DE61159E0493 /* Pods-HttpRequest.debug.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -436,6 +445,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.LomotifPteLtd.HttpRequest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -443,6 +453,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = FA2E472E703AD4DF5748CB29 /* Pods-HttpRequest.release.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
