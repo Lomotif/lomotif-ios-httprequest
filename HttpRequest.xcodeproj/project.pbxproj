@@ -106,7 +106,7 @@
 			children = (
 				C9C1E9711CCAAD5100D361A8 /* HttpRequest.h */,
 				C9C1E9891CCACD5900D361A8 /* HttpRequest.swift */,
-				C9C1E9961CCAE3A300D361A8 /* ConcurrentOperation.swift */,
+				C9C1E9981CCAF86A00D361A8 /* Shared */,
 				C9C1E9951CCAE37200D361A8 /* Download */,
 				C9C1E98D1CCAD40D00D361A8 /* DictionaryExtension.swift */,
 				C9C1E9731CCAAD5100D361A8 /* Info.plist */,
@@ -130,6 +130,14 @@
 				C9C1E9931CCAE36D00D361A8 /* DownloadTask.swift */,
 			);
 			name = Download;
+			sourceTree = "<group>";
+		};
+		C9C1E9981CCAF86A00D361A8 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				C9C1E9961CCAE3A300D361A8 /* ConcurrentOperation.swift */,
+			);
+			name = Shared;
 			sourceTree = "<group>";
 		};
 		FFD6321B1FA2E408377C8158 /* Frameworks */ = {
