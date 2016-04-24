@@ -29,6 +29,13 @@ class DownloadManager: NSObject {
     }
     
     /**
+     Start a download task
+     */
+    func startDownloadTask(task: DownloadTask) {
+        self.queue.addOperation(task)
+    }
+    
+    /**
      Cancel all download tasks
      */
     func cancelAllDownloadTasks() {
