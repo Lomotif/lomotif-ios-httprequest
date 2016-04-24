@@ -7,9 +7,7 @@
 //
 
 import UIKit
-import HttpRequest
 import XCGLogger
-import Alamofire
 
 let log = XCGLogger()
 
