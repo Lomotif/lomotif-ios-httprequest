@@ -42,9 +42,7 @@ public class HttpRequest: NSObject {
     public var alamofireManager: Manager!
     public var timeoutInterval: NSTimeInterval = 30 {
         didSet {
-            let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
-            configuration.timeoutIntervalForRequest = self.timeoutInterval
-            self.alamofireManager = Alamofire.Manager(configuration: configuration)
+            alamofireManager = Alamofire.Manager(configuration: HttpRequest.configurationWithTimeoutInterval(timeoutInterval))
         }
     }
     
@@ -56,7 +54,7 @@ public class HttpRequest: NSObject {
         struct Singleton {
             static let instance = HttpRequest()
         }
-        Singleton.instance.alamofireManager = Manager.sharedInstance
+        Singleton.instance.alamofireManager = Alamofire.Manager(configuration: HttpRequest.configurationWithTimeoutInterval(Singleton.instance.timeoutInterval))
         return Singleton.instance
     }
     
@@ -170,16 +168,24 @@ public class HttpRequest: NSObject {
         return requestHeaders
     }
     
+    class func configurationWithTimeoutInterval(timeoutInterval: NSTimeInterval) -> NSURLSessionConfiguration {
+        let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
+        configuration.timeoutIntervalForRequest = timeoutInterval
+        return configuration
+    }
+    
 }
 
 extension Request {
     
-    public func timeout(queue queue: dispatch_queue_t? = nil, requestTimeoutHandler: (response: NSHTTPURLResponse?) -> Void) -> Self {
-        delegate.queue.addOperationWithBlock {
-            // TODO: need timeout logic here
-            dispatch_async(queue ?? dispatch_get_main_queue()) {
-                
-//                requestTimeoutHandler()
+    public func timeout(requestTimeoutHandler: (url: NSURL?) -> Void) -> Self {
+        return response { (request, response, data, error) -> Void in
+            if let error = error where error.domain == "NSURLErrorDomain" && error.code == -1001 {
+                var url: NSURL?
+                if let failingURLString = error.userInfo["NSErrorFailingURLStringKey"] as? String {
+                    url = NSURL(string: failingURLString)
+                }
+                requestTimeoutHandler(url: url)
             }
         }
         return self
