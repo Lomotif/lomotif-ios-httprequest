@@ -2,8 +2,8 @@
 //  DownloadTask.swift
 //  Lomotif
 //
-//  Created by Kok Chung Law on 2015/10/20.
-//  Copyright © 2015年 Lomotif. All rights reserved.
+//  Created by Kok Chung Law on 22/4/16.
+//  Copyright © 2016 Lomotif Private Limited. All rights reserved.
 //
 
 import Foundation

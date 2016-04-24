@@ -2,8 +2,8 @@
 //  ConcurrentOperation.swift
 //  Lomotif
 //
-//  Created by Casey on 1/9/15.
-//  Copyright (c) 2015 Lomotif. All rights reserved.
+//  Created by Kok Chung Law on 22/4/16.
+//  Copyright © 2016 Lomotif Private Limited. All rights reserved.
 //
 
 import UIKit
