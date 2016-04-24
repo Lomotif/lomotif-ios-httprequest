@@ -36,9 +36,17 @@ let log: XCGLogger = {
 public class HttpRequest: NSObject {
     
     // MARK: - Properties
-    public private(set) var authorizationHeaders: HttpHeaders = [:]
-    public private(set) var agentHeaders: HttpHeaders = [:]
-    public private(set) var refererHeaders: HttpHeaders = [:]
+    public var authorizationHeaders: HttpHeaders = [:]
+    public var agentHeaders: HttpHeaders = [:]
+    public var refererHeaders: HttpHeaders = [:]
+    public var alamofireManager: Manager!
+    public var timeoutInterval: NSTimeInterval = 30 {
+        didSet {
+            let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
+            configuration.timeoutIntervalForRequest = self.timeoutInterval
+            self.alamofireManager = Alamofire.Manager(configuration: configuration)
+        }
+    }
     
     // MARK: - Functions
     /**
@@ -87,7 +95,7 @@ public class HttpRequest: NSObject {
         var requestHeaders: HttpHeaders = self.buildRequestHeader(requiredAuthorization)
         requestHeaders.append(headers)
         log.debug("Url: \(URLString), Method: \(method) \nHeader: \(requestHeaders)\nParameters: \(body)")
-        return Alamofire.request(method, URLString, parameters: body, encoding: encoding, headers: requestHeaders)
+        return sharedInstance().alamofireManager.request(method, URLString, parameters: body, encoding: encoding, headers: requestHeaders)
     }
     
     /**
