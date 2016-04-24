@@ -56,6 +56,7 @@ public class HttpRequest: NSObject {
         struct Singleton {
             static let instance = HttpRequest()
         }
+        Singleton.instance.alamofireManager = Manager.sharedInstance
         return Singleton.instance
     }
     
@@ -167,6 +168,21 @@ public class HttpRequest: NSObject {
             requestHeaders.append(sharedInstance().refererHeaders)
         }
         return requestHeaders
+    }
+    
+}
+
+extension Request {
+    
+    public func timeout(queue queue: dispatch_queue_t? = nil, requestTimeoutHandler: (response: NSHTTPURLResponse?) -> Void) -> Self {
+        delegate.queue.addOperationWithBlock {
+            // TODO: need timeout logic here
+            dispatch_async(queue ?? dispatch_get_main_queue()) {
+                
+//                requestTimeoutHandler()
+            }
+        }
+        return self
     }
     
 }
