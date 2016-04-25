@@ -13,7 +13,8 @@ Pod::Spec.new do |s|
     s.framework = 'Foundation'
     s.dependency 'Alamofire'
     s.dependency 'AlamofireImage'
-s.source_files = "HttpRequest/*.{h,swift}"
+    s.dependency 'HanekeSwift'
+    s.source_files = "HttpRequest/*.{h,swift}"
     s.module_name = 'HttpRequest'
 
 end
