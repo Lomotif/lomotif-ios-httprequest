@@ -93,8 +93,12 @@ extension Cache {
     /**
      Fetch file from url 
      
-     - parameter requiredAuthorization: The error object
-     - returns: Return true if the request is connection timeout, false otherwise
+     - parameter URL: URL to fetch the file from
+     - parameter headers: Optional request headers
+     - parameter body: Optional request body
+     - paramater failure: Failure handler block
+     - paramater success: Success handler block
+     - returns: FileFetcher instance
      */
     func fetchFile(URL: URLStringConvertible, headers: HttpHeaders? = nil, body: HttpBody? = nil, formatName: String, failure: FileFetcher.FailureHandler, success: FileFetcher.SuccessHandler) -> FileFetcher {
         let fetcher = FileFetcher(URL: URL, headers: headers, body: body, formatName: formatName)
@@ -102,6 +106,14 @@ extension Cache {
         return fetcher
     }
     
+    /**
+     Fetch file with url request
+     
+     - parameter request: URL request to fetch the file from
+     - paramater failure: Failure handler block
+     - paramater success: Success handler block
+     - returns: FileFetcher instance
+     */
     func fetchFile(request: URLRequestConvertible, formatName: String, failure: FileFetcher.FailureHandler, success: FileFetcher.SuccessHandler) -> FileFetcher {
         let fetcher = FileFetcher(request: request, formatName: formatName)
         Shared.fileCache.fetch(fetcher: fetcher).onFailure(failure).onSuccess(success)
