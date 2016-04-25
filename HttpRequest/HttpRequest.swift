@@ -176,19 +176,29 @@ public class HttpRequest: NSObject {
     
 }
 
+// MARK: - Alamofire Request extension
 extension Request {
     
-    public func timeout(requestTimeoutHandler: (url: NSURL?) -> Void) -> Self {
+    public func timeout(requestTimeoutHandler: (url: NSURL?, error: NSError?) -> Void) -> Self {
         return response { (request, response, data, error) -> Void in
-            if let error = error where error.domain == "NSURLErrorDomain" && error.code == -1001 {
+            if let error = error where self.isConnectionTimeoutError(error) {
                 var url: NSURL?
                 if let failingURLString = error.userInfo["NSErrorFailingURLStringKey"] as? String {
                     url = NSURL(string: failingURLString)
                 }
-                requestTimeoutHandler(url: url)
+                requestTimeoutHandler(url: url, error: error)
             }
         }
-        return self
+    }
+    
+    /**
+     Check if the error is connection timeout
+     
+     - parameter error: The error object
+     - returns: Return true if the request is connection timeout, false otherwise
+     */
+    func isConnectionTimeoutError(error: NSError) -> Bool {
+        return error.domain == "NSURLErrorDomain" && error.code == -1001
     }
     
 }
