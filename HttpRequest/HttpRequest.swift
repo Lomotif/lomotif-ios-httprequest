@@ -48,7 +48,7 @@ public class HttpRequest: NSObject {
     }
     
     // MARK: - Initializer
-    override init() {
+    public override init() {
         super.init()
         alamofireManager = Alamofire.Manager(configuration: HttpRequest.configurationWithTimeoutInterval(timeoutInterval))
     }
