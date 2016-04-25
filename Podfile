@@ -9,6 +9,7 @@ end
 
 target 'HttpRequest' do
     shared_pods
+    pod 'HanekeSwift'
 end
 
 target 'HttpRequestTests' do
