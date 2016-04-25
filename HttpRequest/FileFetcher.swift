@@ -22,12 +22,16 @@ class FileFetcher: Fetcher<NSData> {
     
     // MARK: - Properties
     private(set) var URL: URLStringConvertible?
+    private(set) var headers: HttpHeaders?
+    private(set) var body: HttpBody?
     private(set) var request: Request?
     
     // MARK: - Initializer
-    init(URL: URLStringConvertible) {
+    init(URL: URLStringConvertible, headers: HttpHeaders? = nil, body: HttpBody? = nil) {
         super.init(key: URL.URLString)
         self.URL = URL
+        self.headers = headers
+        self.body = body
     }
     
     // MARK: - Functions
@@ -41,7 +45,7 @@ class FileFetcher: Fetcher<NSData> {
         if URL == nil {
             failure?(nil)
         }
-        request = HttpRequest.GET(URL!).response(completionHandler: { (request, response, data, error) in
+        request = HttpRequest.GET(URL!, headers: headers, body: body).response(completionHandler: { (request, response, data, error) in
             if error != nil {
                 failure?(error)
             } else if data != nil {
@@ -54,7 +58,7 @@ class FileFetcher: Fetcher<NSData> {
     /**
      Get fetching progress
      */
-    func fetchProgress(closure: ((Int64, Int64, Int64) -> Void)?) -> Self {
+    func progress(closure: ((Int64, Int64, Int64) -> Void)?) -> Self {
         request?.progress(closure)
         return self
     }
