@@ -215,7 +215,21 @@ extension Request {
      - returns: Return true if the request is connection timeout, false otherwise
      */
     public func isConnectionTimeoutError(error: NSError) -> Bool {
-        return error.domain == "NSURLErrorDomain" && error.code == -1001
+        return error.isConnectionTimeoutError()
+    }
+    
+}
+
+// MARK: - NSError extension
+public extension NSError {
+    
+    /**
+     Check if the error is connection timeout
+     
+     - returns: Return true if the request is connection timeout, false otherwise
+     */
+    public func isConnectionTimeoutError() -> Bool {
+        return domain == "NSURLErrorDomain" && code == -1001
     }
     
 }
