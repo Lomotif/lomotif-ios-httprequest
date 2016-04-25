@@ -22,14 +22,14 @@ import UIKit
 ///   necessary and then ensuring that `completeOperation()` is called; or
 ///   override `cancel` method, calling `super.cancel()` and then cleaning-up
 ///   and ensuring `completeOperation()` is called.
-class ConcurrentOperation: NSOperation {
+public class ConcurrentOperation: NSOperation {
    
-    override var asynchronous: Bool {
+    override public var asynchronous: Bool {
         return true
     }
     
     private var _executing: Bool = false
-    override var executing: Bool {
+    override public var executing: Bool {
         get {
             return _executing
         }
@@ -43,7 +43,7 @@ class ConcurrentOperation: NSOperation {
     }
     
     private var _finished: Bool = false;
-    override var finished: Bool {
+    override public var finished: Bool {
         get {
             return _finished
         }
@@ -64,7 +64,7 @@ class ConcurrentOperation: NSOperation {
         self.finished  = true
     }
     
-    override func start() {
+    override public func start() {
         if self.cancelled {
             self.finished = true
             return
