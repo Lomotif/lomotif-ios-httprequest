@@ -166,7 +166,7 @@ public class HttpRequest: NSObject {
      - parameter requiredAuthorization: Is the request call authenticated? Default value is false
      - returns: The request headers
      */
-    class func buildRequestHeader(requiredAuthorization: Bool) -> HttpHeaders {
+    public class func buildRequestHeader(requiredAuthorization: Bool) -> HttpHeaders {
         var requestHeaders: HttpHeaders!
         if requiredAuthorization {
             requestHeaders = sharedInstance().authorizationHeaders
@@ -185,7 +185,7 @@ public class HttpRequest: NSObject {
      - parameter timeoutInterval: timeout interval for network request
      - returns: The URL session configuration instance
      */
-    class func configurationWithTimeoutInterval(timeoutInterval: NSTimeInterval) -> NSURLSessionConfiguration {
+    public class func configurationWithTimeoutInterval(timeoutInterval: NSTimeInterval) -> NSURLSessionConfiguration {
         let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
         configuration.timeoutIntervalForRequest = timeoutInterval
         return configuration
@@ -214,7 +214,7 @@ extension Request {
      - parameter error: The error object
      - returns: Return true if the request is connection timeout, false otherwise
      */
-    func isConnectionTimeoutError(error: NSError) -> Bool {
+    public func isConnectionTimeoutError(error: NSError) -> Bool {
         return error.domain == "NSURLErrorDomain" && error.code == -1001
     }
     
