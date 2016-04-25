@@ -47,6 +47,12 @@ public class HttpRequest: NSObject {
         }
     }
     
+    // MARK: - Initializer
+    override init() {
+        super.init()
+        alamofireManager = Alamofire.Manager(configuration: HttpRequest.configurationWithTimeoutInterval(timeoutInterval))
+    }
+    
     // MARK: - Functions
     /**
      HttpRequest shared instance
@@ -55,7 +61,6 @@ public class HttpRequest: NSObject {
         struct Singleton {
             static let instance = HttpRequest()
         }
-        Singleton.instance.alamofireManager = Alamofire.Manager(configuration: HttpRequest.configurationWithTimeoutInterval(Singleton.instance.timeoutInterval))
         return Singleton.instance
     }
     
