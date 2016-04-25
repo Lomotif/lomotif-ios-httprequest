@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension Dictionary {
+public extension Dictionary {
     
     mutating func append(dictionary: Dictionary?) {
         if dictionary == nil {
