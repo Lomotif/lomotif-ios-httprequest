@@ -63,7 +63,7 @@ class FileFetcher: Fetcher<NSData> {
             if error != nil {
                 failure?(error)
             } else if data != nil {
-                Shared.dataCache.set(value: data!, key: self.key, formatName: self.formatName, success: { (data) in
+                Shared.fileCache.set(value: data!, key: self.key, formatName: self.formatName, success: { (data) in
                     success?(data)
                 })
             }
@@ -98,14 +98,28 @@ extension Cache {
      */
     func fetchFile(URL: URLStringConvertible, headers: HttpHeaders? = nil, body: HttpBody? = nil, formatName: String, failure: FileFetcher.FailureHandler, success: FileFetcher.SuccessHandler) -> FileFetcher {
         let fetcher = FileFetcher(URL: URL, headers: headers, body: body, formatName: formatName)
-        Shared.dataCache.fetch(fetcher: fetcher).onFailure(failure).onSuccess(success)
+        Shared.fileCache.fetch(fetcher: fetcher).onFailure(failure).onSuccess(success)
         return fetcher
     }
     
     func fetchFile(request: URLRequestConvertible, formatName: String, failure: FileFetcher.FailureHandler, success: FileFetcher.SuccessHandler) -> FileFetcher {
         let fetcher = FileFetcher(request: request, formatName: formatName)
-        Shared.dataCache.fetch(fetcher: fetcher).onFailure(failure).onSuccess(success)
+        Shared.fileCache.fetch(fetcher: fetcher).onFailure(failure).onSuccess(success)
         return fetcher
+    }
+    
+}
+
+// MARK: Haneke Shared extension
+extension Shared {
+    
+    // MARK: Shared file cache instance
+    public static var fileCache : Cache<NSData> {
+        struct Static {
+            static let name = "shared-file"
+            static let cache = Cache<NSData>(name: name)
+        }
+        return Static.cache
     }
     
 }
