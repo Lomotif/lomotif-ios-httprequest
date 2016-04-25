@@ -26,18 +26,21 @@ class FileFetcher: Fetcher<NSData> {
     private(set) var headers: HttpHeaders?
     private(set) var body: HttpBody?
     private(set) var request: Request?
+    private(set) var formatName: String!
     
     // MARK: - Initializer
-    init(URL: URLStringConvertible, headers: HttpHeaders? = nil, body: HttpBody? = nil) {
+    init(URL: URLStringConvertible, headers: HttpHeaders? = nil, body: HttpBody? = nil, formatName: String = HanekeGlobals.Cache.OriginalFormatName) {
         super.init(key: URL.URLString)
         self.URL = URL
         self.headers = headers
         self.body = body
+        self.formatName = formatName
     }
     
-    init(request: URLRequestConvertible) {
+    init(request: URLRequestConvertible, formatName: String = HanekeGlobals.Cache.OriginalFormatName) {
         super.init(key: request.URLRequest.URLString)
         self.URLRequest = request
+        self.formatName = formatName
     }
     
     // MARK: - Functions
@@ -60,10 +63,18 @@ class FileFetcher: Fetcher<NSData> {
             if error != nil {
                 failure?(error)
             } else if data != nil {
-                Shared.dataCache.set(value: data!, key: self.key)
-                success?(data!)
+                Shared.dataCache.set(value: data!, key: self.key, formatName: self.formatName, success: { (data) in
+                    success?(data)
+                })
             }
         })
+    }
+    
+    /**
+     Cancel fetching
+     */
+    override func cancelFetch() {
+        request?.cancel()
     }
     
     /**
@@ -85,8 +96,14 @@ extension Cache {
      - parameter requiredAuthorization: The error object
      - returns: Return true if the request is connection timeout, false otherwise
      */
-    func fetchFile(URL: URLStringConvertible, formatName: String, failure: FileFetcher.FailureHandler, success: FileFetcher.SuccessHandler) -> FileFetcher {
-        let fetcher = FileFetcher(URL: URL)
+    func fetchFile(URL: URLStringConvertible, headers: HttpHeaders? = nil, body: HttpBody? = nil, formatName: String, failure: FileFetcher.FailureHandler, success: FileFetcher.SuccessHandler) -> FileFetcher {
+        let fetcher = FileFetcher(URL: URL, headers: headers, body: body, formatName: formatName)
+        Shared.dataCache.fetch(fetcher: fetcher).onFailure(failure).onSuccess(success)
+        return fetcher
+    }
+    
+    func fetchFile(request: URLRequestConvertible, formatName: String, failure: FileFetcher.FailureHandler, success: FileFetcher.SuccessHandler) -> FileFetcher {
+        let fetcher = FileFetcher(request: request, formatName: formatName)
         Shared.dataCache.fetch(fetcher: fetcher).onFailure(failure).onSuccess(success)
         return fetcher
     }
