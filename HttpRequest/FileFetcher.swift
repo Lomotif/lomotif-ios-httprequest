@@ -22,6 +22,7 @@ class FileFetcher: Fetcher<NSData> {
     
     // MARK: - Properties
     private(set) var URL: URLStringConvertible?
+    private(set) var URLRequest: URLRequestConvertible?
     private(set) var headers: HttpHeaders?
     private(set) var body: HttpBody?
     private(set) var request: Request?
@@ -32,6 +33,11 @@ class FileFetcher: Fetcher<NSData> {
         self.URL = URL
         self.headers = headers
         self.body = body
+    }
+    
+    init(request: URLRequestConvertible) {
+        super.init(key: request.URLRequest.URLString)
+        self.URLRequest = request
     }
     
     // MARK: - Functions
@@ -45,7 +51,12 @@ class FileFetcher: Fetcher<NSData> {
         if URL == nil {
             failure?(nil)
         }
-        request = HttpRequest.GET(URL!, headers: headers, body: body).response(completionHandler: { (request, response, data, error) in
+        if URL != nil {
+            request = HttpRequest.GET(URL!, headers: headers, body: body)
+        } else if URLRequest != nil {
+            request = HttpRequest.request(URLRequest!)
+        }
+        request?.response(completionHandler: { (request, response, data, error) in
             if error != nil {
                 failure?(error)
             } else if data != nil {
