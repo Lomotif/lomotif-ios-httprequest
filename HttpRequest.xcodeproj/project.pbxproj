@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		352CC9A0687CD45B7D4EF619 /* Pods_HttpRequest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED41D24EFAF7CB96DEDD6BDA /* Pods_HttpRequest.framework */; };
 		7C534784C626640C6D0E9BB2 /* Pods_HttpRequestTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CCEEAC22DA6AA894B0B93C8 /* Pods_HttpRequestTests.framework */; };
+		C97D46531CCD7C8700CE72BD /* FileFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97D46521CCD7C8700CE72BD /* FileFetcher.swift */; };
 		C9C1E9721CCAAD5100D361A8 /* HttpRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = C9C1E9711CCAAD5100D361A8 /* HttpRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C9C1E9791CCAAD5100D361A8 /* HttpRequest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9C1E96E1CCAAD5000D361A8 /* HttpRequest.framework */; };
 		C9C1E97E1CCAAD5100D361A8 /* HttpRequestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C1E97D1CCAAD5100D361A8 /* HttpRequestTests.swift */; };
@@ -33,6 +34,7 @@
 		2EDB61B582A5DE61159E0493 /* Pods-HttpRequest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HttpRequest.debug.xcconfig"; path = "Pods/Target Support Files/Pods-HttpRequest/Pods-HttpRequest.debug.xcconfig"; sourceTree = "<group>"; };
 		5CCEEAC22DA6AA894B0B93C8 /* Pods_HttpRequestTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HttpRequestTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B645D503596DDB6C7139A8E1 /* Pods-HttpRequestTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HttpRequestTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-HttpRequestTests/Pods-HttpRequestTests.debug.xcconfig"; sourceTree = "<group>"; };
+		C97D46521CCD7C8700CE72BD /* FileFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileFetcher.swift; sourceTree = "<group>"; };
 		C9C1E96E1CCAAD5000D361A8 /* HttpRequest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HttpRequest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9C1E9711CCAAD5100D361A8 /* HttpRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HttpRequest.h; sourceTree = "<group>"; };
 		C9C1E9731CCAAD5100D361A8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -128,6 +130,7 @@
 			children = (
 				C9C1E9911CCAE34B00D361A8 /* DownloadManager.swift */,
 				C9C1E9931CCAE36D00D361A8 /* DownloadTask.swift */,
+				C97D46521CCD7C8700CE72BD /* FileFetcher.swift */,
 			);
 			name = Download;
 			sourceTree = "<group>";
@@ -345,6 +348,7 @@
 				C9C1E9971CCAE3A300D361A8 /* ConcurrentOperation.swift in Sources */,
 				C9C1E9921CCAE34B00D361A8 /* DownloadManager.swift in Sources */,
 				C9C1E98E1CCAD40D00D361A8 /* DictionaryExtension.swift in Sources */,
+				C97D46531CCD7C8700CE72BD /* FileFetcher.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
