@@ -59,7 +59,7 @@ public class ConcurrentOperation: NSOperation {
     /// Complete the operation
     ///
     /// This will result in the appropriate KVN of isFinished and isExecuting
-    func completeOperation() {
+    public func completeOperation() {
         self.executing = false
         self.finished  = true
     }
