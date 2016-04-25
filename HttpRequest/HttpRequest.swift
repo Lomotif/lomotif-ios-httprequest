@@ -16,6 +16,7 @@ public typealias HttpBody = [String: AnyObject]
 public typealias Request = Alamofire.Request
 public typealias Method = Alamofire.Method
 public typealias URLStringConvertible = Alamofire.URLStringConvertible
+public typealias URLRequestConvertible = Alamofire.URLRequestConvertible
 
 // XCGLogger
 let log: XCGLogger = {
@@ -84,7 +85,7 @@ public class HttpRequest: NSObject {
      
      - parameter method: Request method
      - parameter URLString: Request url
-     - parameter headers: Request body
+     - parameter headers: Request headers
      - parameter body: Request body
      - parameter requiredAuthorization: Is the request call authenticated? Default value is false
      - returns: A request instance
@@ -98,10 +99,20 @@ public class HttpRequest: NSObject {
     }
     
     /**
+     Make http request
+     
+     - parameter request: URL request instance
+     - returns: A request instance
+     */
+    public class func request(request: URLRequestConvertible) -> Request {
+        return sharedInstance().alamofireManager.request(request)
+    }
+    
+    /**
      Make GET request with url, headers and body
      
      - parameter URLString: Request url
-     - parameter headers: Request body
+     - parameter headers: Request headers
      - parameter body: Request body
      - parameter requiredAuthorization: Is the request call authenticated? Default value is false
      - returns: A request instance
@@ -114,7 +125,7 @@ public class HttpRequest: NSObject {
      Make POST request with url, headers and body
      
      - parameter URLString: Request url
-     - parameter headers: Request body
+     - parameter headers: Request headers
      - parameter body: Request body
      - parameter requiredAuthorization: Is the request call authenticated? Default value is false
      - returns: A request instance
@@ -127,7 +138,7 @@ public class HttpRequest: NSObject {
      Make PUT request with url, headers and body
      
      - parameter URLString: Request url
-     - parameter headers: Request body
+     - parameter headers: Request headers
      - parameter body: Request body
      - parameter requiredAuthorization: Is the request call authenticated? Default value is false
      - returns: A request instance
@@ -140,7 +151,7 @@ public class HttpRequest: NSObject {
      Make DELETE request with url, headers and body
      
      - parameter URLString: Request url
-     - parameter headers: Request body
+     - parameter headers: Request headers
      - parameter body: Request body
      - parameter requiredAuthorization: Is the request call authenticated? Default value is false
      - returns: A request instance
@@ -168,6 +179,12 @@ public class HttpRequest: NSObject {
         return requestHeaders
     }
     
+    /**
+     Build URL session configuration with given timeout interval value
+     
+     - parameter timeoutInterval: timeout interval for network request
+     - returns: The URL session configuration instance
+     */
     class func configurationWithTimeoutInterval(timeoutInterval: NSTimeInterval) -> NSURLSessionConfiguration {
         let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
         configuration.timeoutIntervalForRequest = timeoutInterval
