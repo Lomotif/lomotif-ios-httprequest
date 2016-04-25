@@ -5,7 +5,7 @@ Pod::Spec.new do |s|
     s.name = "HttpRequest"
     s.summary = "HttpRequest handles Lomotif iOS http request."
     s.requires_arc = true
-    s.version = "0.1.0"
+    s.version = "0.1.2"
     s.license = { :type => "MIT", :file => "LICENSE" }
     s.author = { "Casey Law" => "casey@lomotif.com" }
     s.homepage = "http://www.lomotif.com"
