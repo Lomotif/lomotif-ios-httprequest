@@ -237,4 +237,13 @@ public extension NSError {
         return domain == "NSURLErrorDomain" && code == -1001
     }
     
+    /**
+     Check if the error is request cancelled
+     
+     - returns: Return true if the request is cancelled, false otherwise
+     */
+    public func isRequestCancelledError() -> Bool {
+        return domain == "NSURLErrorDomain" && code == -999
+    }
+    
 }
