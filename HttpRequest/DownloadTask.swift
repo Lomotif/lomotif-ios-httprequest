@@ -13,28 +13,28 @@ import Alamofire
 /**
 This is a protocol for download task delegate
 */
-protocol DownloadTaskDelegate: class {
+public protocol DownloadTaskDelegate: class {
     
     /**
     Callback when upload received progress
     
     - parameter progress: Download progress with scale from 0 to 1
     */
-    func downloadTaskDownloadProgress(progress: Float)
+    public func downloadTaskDownloadProgress(progress: Float)
     
     /**
     Callback when upload has failed
     
     - parameter error: An error instance describing the issue
     */
-    func downloadTaskFailedWithError(error: NSError!)
+    public func downloadTaskFailedWithError(error: NSError!)
     
     /**
     Callback when upload has complated
     
     - parameter url: An URL to the downloaded file if available
     */
-    func downloadTaskCompletedWithUrl(url: NSURL!)
+    public func downloadTaskCompletedWithUrl(url: NSURL!)
     
 }
 
@@ -42,28 +42,28 @@ protocol DownloadTaskDelegate: class {
 /**
 This class is a wrapper class for Alamofire download request class. When the downloading task is created and start, it will be added to the background task, and be removed when download has failed or completed.
 */
-class DownloadTask: ConcurrentOperation {
+public class DownloadTask: ConcurrentOperation {
     
     // MARK: - Properties
     /**
     ID for download task
     */
-    private(set) var id: String!
+    public private(set) var id: String!
     
     /**
     Identifier for background download task
     */
-    private(set) var backgroundTaskIdentifier: UIBackgroundTaskIdentifier!
+    public private(set) var backgroundTaskIdentifier: UIBackgroundTaskIdentifier!
     
     /**
     Source url of the file to be downloaded
     */
-    private(set) var sourceUrl: NSURL!
+    public private(set) var sourceUrl: NSURL!
     
     /**
     Destination path on disk where the file should be downloaded to
     */
-    private(set) var destinationPathUrl: NSURL!
+    public private(set) var destinationPathUrl: NSURL!
     
     /**
     Temporary path on disk before it is copied over to destination path
@@ -73,15 +73,15 @@ class DownloadTask: ConcurrentOperation {
     /**
     Network request instance used for download
     */
-    private(set) var request: Request!
+    public private(set) var request: Request!
     
     /**
     The delegate instance for callback
     */
-    weak var delegate: DownloadTaskDelegate?
+    public weak var delegate: DownloadTaskDelegate?
     
     // MARK: - Initializer
-    init(id: String, sourceUrl: NSURL, destinationPathUrl: NSURL, delegate: DownloadTaskDelegate?) {
+    public init(id: String, sourceUrl: NSURL, destinationPathUrl: NSURL, delegate: DownloadTaskDelegate?) {
         super.init()
         self.id = id
         self.sourceUrl = sourceUrl
@@ -97,7 +97,7 @@ class DownloadTask: ConcurrentOperation {
     /**
     Start download task
     */
-    override func start() {
+    public override func start() {
         super.start()
         // start background downloading task
         self.backgroundTaskIdentifier = UIApplication.sharedApplication().beginBackgroundTaskWithExpirationHandler({ () -> Void in
@@ -123,7 +123,7 @@ class DownloadTask: ConcurrentOperation {
         }
     }
     
-    func endBackgroundTask() {
+    public func endBackgroundTask() {
         UIApplication.sharedApplication().endBackgroundTask(self.backgroundTaskIdentifier)
         self.backgroundTaskIdentifier = UIBackgroundTaskInvalid
     }
@@ -131,7 +131,7 @@ class DownloadTask: ConcurrentOperation {
     /**
     Callback when download is completed, whether fail or success
     */
-    func downloadCompletionCallback(request: NSURLRequest?, response: NSHTTPURLResponse?, result: NSData?, error: NSError?) {
+    public func downloadCompletionCallback(request: NSURLRequest?, response: NSHTTPURLResponse?, result: NSData?, error: NSError?) {
         self.endBackgroundTask()
         self.completeOperation()
         guard let error = error else {
@@ -159,7 +159,7 @@ class DownloadTask: ConcurrentOperation {
     /**
     Cancel download task
     */
-    override func cancel() {
+    public override func cancel() {
         self.delegate = nil
         super.cancel()
         self.request?.cancel()

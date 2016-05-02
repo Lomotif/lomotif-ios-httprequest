@@ -9,13 +9,13 @@
 import Foundation
 
 // MARK: - DownloadManager class, handle all background downloads
-class DownloadManager: NSObject {
+public class DownloadManager: NSObject {
     
     // MARK: - Properties
     /**
      Network request queue
      */
-    dynamic private(set) lazy var queue: NSOperationQueue = {
+    public dynamic private(set) lazy var queue: NSOperationQueue = {
         let maxOperationCount = 5
         let queue = NSOperationQueue()
         queue.maxConcurrentOperationCount = maxOperationCount
@@ -23,7 +23,7 @@ class DownloadManager: NSObject {
     }()
     
     // MARK: - Initializer
-    override init() {
+    public override init() {
         super.init()
         self.addObserver(self, forKeyPath: "queue.operations", options: NSKeyValueObservingOptions.New, context: nil)
     }
@@ -31,14 +31,14 @@ class DownloadManager: NSObject {
     /**
      Start a download task
      */
-    func startDownloadTask(task: DownloadTask) {
+    public func startDownloadTask(task: DownloadTask) {
         self.queue.addOperation(task)
     }
     
     /**
      Cancel all download tasks
      */
-    func cancelAllDownloadTasks() {
+    public func cancelAllDownloadTasks() {
         self.queue.cancelAllOperations()
     }
     
@@ -47,7 +47,7 @@ class DownloadManager: NSObject {
     }
     
     // MARK: - Key-value Observer
-    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+    public override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
         if keyPath == "queue.operations" {
             log.debug("Number of downloading task: \(self.queue.operations.count)")
         }
@@ -56,7 +56,7 @@ class DownloadManager: NSObject {
     /**
      HttpRequest shared instance
      */
-    class func sharedInstance() -> DownloadManager {
+    public class func sharedInstance() -> DownloadManager {
         struct Singleton {
             static let instance = DownloadManager()
         }
@@ -66,7 +66,7 @@ class DownloadManager: NSObject {
     /**
      Get temporary download folder url
      */
-    class func downloadFolderUrl() -> NSURL? {
+    public class func downloadFolderUrl() -> NSURL? {
         let folderPathUrl = NSURL(fileURLWithPath: NSTemporaryDirectory()).URLByAppendingPathComponent("download")
         
         // create folder if it does not exist yet
