@@ -20,21 +20,21 @@ public protocol DownloadTaskDelegate: class {
     
     - parameter progress: Download progress with scale from 0 to 1
     */
-    public func downloadTaskDownloadProgress(progress: Float)
+    func downloadTaskDownloadProgress(progress: Float)
     
     /**
     Callback when upload has failed
     
     - parameter error: An error instance describing the issue
     */
-    public func downloadTaskFailedWithError(error: NSError!)
+    func downloadTaskFailedWithError(error: NSError!)
     
     /**
     Callback when upload has complated
     
     - parameter url: An URL to the downloaded file if available
     */
-    public func downloadTaskCompletedWithUrl(url: NSURL!)
+    func downloadTaskCompletedWithUrl(url: NSURL!)
     
 }
 
