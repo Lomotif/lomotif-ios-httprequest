@@ -21,12 +21,12 @@ public class FileFetcher: Fetcher<NSData> {
     public typealias FailureHandler = (NSError?) -> ()
     
     // MARK: - Properties
-    public private(set) var URL: URLStringConvertible?
-    public private(set) var URLRequest: URLRequestConvertible?
-    public private(set) var headers: HttpHeaders?
-    public private(set) var body: HttpBody?
-    public private(set) var request: Request?
-    public private(set) var formatName: String!
+    public var URL: URLStringConvertible?
+    public var URLRequest: URLRequestConvertible?
+    public var headers: HttpHeaders?
+    public var body: HttpBody?
+    public var request: Request?
+    public var formatName: String!
     public var successHandler: SuccessHandler?
     public var failureHandler: FailureHandler?
     
