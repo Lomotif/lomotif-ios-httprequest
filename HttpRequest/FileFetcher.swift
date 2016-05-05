@@ -51,10 +51,10 @@ public class FileFetcher: Fetcher<NSData> {
     // MARK: - Functions
     /**
      Fetching file with alamofire request
-
+     
      - parameter failure: Failure handler block
      - parameter success: Success handler block
-    */
+     */
     public override func fetch(failure failure: FailureHandler?, success: SuccessHandler?) {
         if URL == nil {
             failure?(nil)
@@ -70,17 +70,21 @@ public class FileFetcher: Fetcher<NSData> {
             if let strongSelf = self {
                 if error != nil {
                     strongSelf.failureHandler?(error)
+                    strongSelf.request = nil
+                    strongSelf.successHandler = nil
+                    strongSelf.failureHandler = nil
+                    strongSelf.progressHandler = nil
                 } else if data != nil {
                     strongSelf.cache.set(value: data!, key: strongSelf.key, formatName: strongSelf.formatName, success: { (data) in
                         strongSelf.successHandler?(data)
+                        strongSelf.request = nil
+                        strongSelf.successHandler = nil
+                        strongSelf.failureHandler = nil
+                        strongSelf.progressHandler = nil
                     })
                 }
-                strongSelf.request = nil
-                strongSelf.successHandler = nil
-                strongSelf.failureHandler = nil
-                strongSelf.progressHandler = nil
             }
-        })
+            }).progress(progressHandler)
     }
     
     /**
@@ -92,14 +96,14 @@ public class FileFetcher: Fetcher<NSData> {
         failureHandler = nil
         progressHandler = nil
     }
-
+    
 }
 
 // MARK: Haneke Cache extension
 public extension Cache {
     
     /**
-     Fetch file from url 
+     Fetch file from url
      
      - parameter URL: URL to fetch the file from
      - parameter headers: Optional request headers
