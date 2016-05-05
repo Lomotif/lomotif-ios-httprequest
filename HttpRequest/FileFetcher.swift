@@ -19,6 +19,7 @@ public class FileFetcher: Fetcher<NSData> {
     
     public typealias SuccessHandler = (NSData) -> ()
     public typealias FailureHandler = (NSError?) -> ()
+    public typealias ProgressHandler = ((Int64, Int64, Int64) -> Void)
     
     // MARK: - Properties
     public var URL: URLStringConvertible?
@@ -29,6 +30,8 @@ public class FileFetcher: Fetcher<NSData> {
     public var formatName: String!
     public var successHandler: SuccessHandler?
     public var failureHandler: FailureHandler?
+    public var progressHandler: ProgressHandler?
+    public var cache: Cache<NSData> = Shared.fileCache
     
     // MARK: - Initializer
     public init(URL: URLStringConvertible, headers: HttpHeaders? = nil, body: HttpBody? = nil, formatName: String = HanekeGlobals.Cache.OriginalFormatName) {
@@ -68,10 +71,14 @@ public class FileFetcher: Fetcher<NSData> {
                 if error != nil {
                     strongSelf.failureHandler?(error)
                 } else if data != nil {
-                    Shared.fileCache.set(value: data!, key: strongSelf.key, formatName: strongSelf.formatName, success: { (data) in
+                    strongSelf.cache.set(value: data!, key: strongSelf.key, formatName: strongSelf.formatName, success: { (data) in
                         strongSelf.successHandler?(data)
                     })
                 }
+                strongSelf.request = nil
+                strongSelf.successHandler = nil
+                strongSelf.failureHandler = nil
+                strongSelf.progressHandler = nil
             }
         })
     }
@@ -83,14 +90,7 @@ public class FileFetcher: Fetcher<NSData> {
         request?.cancel()
         successHandler = nil
         failureHandler = nil
-    }
-    
-    /**
-     Get fetching progress
-     */
-    public func progress(closure: ((Int64, Int64, Int64) -> Void)?) -> Self {
-        request?.progress(closure)
-        return self
+        progressHandler = nil
     }
 
 }
