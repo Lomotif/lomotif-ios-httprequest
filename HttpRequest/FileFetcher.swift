@@ -34,12 +34,16 @@ public class FileFetcher: Fetcher<NSData> {
     public var cache: Cache<NSData> = Shared.fileCache
     
     // MARK: - Initializer
-    public init(URL: URLStringConvertible, headers: HttpHeaders? = nil, body: HttpBody? = nil, formatName: String = HanekeGlobals.Cache.OriginalFormatName) {
-        super.init(key: URL.URLString)
+    public init(key: String, URL: URLStringConvertible, headers: HttpHeaders? = nil, body: HttpBody? = nil, formatName: String = HanekeGlobals.Cache.OriginalFormatName) {
+        super.init(key: key)
         self.URL = URL
         self.headers = headers
         self.body = body
         self.formatName = formatName
+    }
+    
+    public convenience init(URL: URLStringConvertible, headers: HttpHeaders? = nil, body: HttpBody? = nil, formatName: String = HanekeGlobals.Cache.OriginalFormatName) {
+        self.init(key: URL.URLString, URL: URL, headers: headers, body: body, formatName: formatName)
     }
     
     public init(request: URLRequestConvertible, formatName: String = HanekeGlobals.Cache.OriginalFormatName) {
