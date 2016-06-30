@@ -119,7 +119,7 @@ public class DownloadTask: ConcurrentOperation {
                 return nil
             }
         }
-        self.id = self.sourceUrl.absoluteString
+        self.id = downloadable.downloadID()
         self.sourceUrl = URL
         self.delegate = delegate
     }
