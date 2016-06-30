@@ -13,6 +13,13 @@ import Alamofire
 public protocol Downloadable {
     
     /**
+     Ask the delegate to provide unique download ID
+     
+     - returns: Unique download ID
+     */
+    func downloadID() -> String
+    
+    /**
      Ask the delegate to provide download URL
      
      - returns: URL to fetch the file
