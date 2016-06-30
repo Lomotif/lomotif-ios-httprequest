@@ -13,28 +13,28 @@ import Alamofire
 /**
 This is a protocol for download task delegate
 */
-public protocol DownloadTaskDelegate: class {
+@objc public protocol DownloadTaskDelegate: class {
     
     /**
-    Callback when upload received progress
+    Callback when download received progress
     
     - parameter progress: Download progress with scale from 0 to 1
     */
-    func downloadTaskDownloadProgress(progress: Float)
+    optional func downloadTask(task: DownloadTask, downloadProgress progress: Float)
     
     /**
-    Callback when upload has failed
+    Callback when download has failed
     
     - parameter error: An error instance describing the issue
     */
-    func downloadTaskFailedWithError(error: NSError!)
+    optional func downloadTask(task: DownloadTask, failedWithError error: NSError)
     
     /**
-    Callback when upload has complated
+    Callback when download has completed
     
     - parameter url: An URL to the downloaded file if available
     */
-    func downloadTaskCompletedWithUrl(url: NSURL!)
+    optional func downloadTask(task: DownloadTask, completedWithFileURL URL: NSURL)
     
 }
 
@@ -115,7 +115,7 @@ public class DownloadTask: ConcurrentOperation {
                 return self.temporaryPathUrl
             }).progress({ [weak self] (bytesRead, totalBytesRead, totalBytesExpectedToRead) -> Void in
                 let progress = Double(totalBytesRead) / Double(totalBytesExpectedToRead)
-                self?.delegate?.downloadTaskDownloadProgress(Float(progress))
+                self?.delegate?.downloadTask?(self!, downloadProgress: Float(progress))
                 }).response(completionHandler: { [weak self] (request, response, data, error) -> Void in
                     self?.downloadCompletionCallback(request, response: response, result: data, error: error)
                     })
@@ -141,15 +141,15 @@ public class DownloadTask: ConcurrentOperation {
                     try NSFileManager.defaultManager().removeItemAtPath(self.destinationPathUrl.path!)
                 }
                 try NSFileManager.defaultManager().moveItemAtPath(self.temporaryPathUrl.path!, toPath: self.destinationPathUrl.path!)
-                self.delegate?.downloadTaskCompletedWithUrl(self.destinationPathUrl)
+                self.delegate?.downloadTask?(self, completedWithFileURL: self.destinationPathUrl)
             } catch let error {
-                self.delegate?.downloadTaskFailedWithError(error as NSError)
+                self.delegate?.downloadTask?(self, failedWithError: error as NSError)
             }
             return
         }
         
         log.error("Download file failed with error: \(error)")
-        self.delegate?.downloadTaskFailedWithError(error)
+        self.delegate?.downloadTask?(self, failedWithError: error)
         do {
             try NSFileManager.defaultManager().removeItemAtPath(self.temporaryPathUrl.path!)
         } catch {
