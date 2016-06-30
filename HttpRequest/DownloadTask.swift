@@ -9,6 +9,25 @@
 import Foundation
 import Alamofire
 
+// MARK: - Downloadable Protocol
+protocol Downloadable {
+    
+    /**
+     Ask the delegate to provide download URL
+     
+     - returns: URL to fetch the file
+     */
+    func downloadURL() -> NSURL?
+    
+    /**
+     Ask the delegate to provide download destination URL
+     
+     - returns: URL on disk to download the file to
+     */
+    func downloadFilePathURL() -> NSURL?
+    
+}
+
 // MARK: - DownloadTaskDelegate Protocol
 /**
 This is a protocol for download task delegate
