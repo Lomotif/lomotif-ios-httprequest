@@ -85,11 +85,6 @@ public class DownloadTask: ConcurrentOperation {
     public private(set) var destinationPathUrl: NSURL!
     
     /**
-    Temporary path on disk before it is copied over to destination path
-    */
-    private var temporaryPathUrl: NSURL!
-    
-    /**
     Network request instance used for download
     */
     public private(set) var request: Request!
@@ -99,17 +94,31 @@ public class DownloadTask: ConcurrentOperation {
     */
     public weak var delegate: DownloadTaskDelegate?
     
+    public init?(downloadable: Downloadable, delegate: DownloadTaskDelegate? = nil) {
+        guard let URL = downloadable.downloadURL() else {
+            return nil
+        }
+        super.init()
+        self.destinationPathUrl = downloadable.downloadFilePathURL()
+        if self.destinationPathUrl == nil {
+            if let destinationURL = DownloadManager.downloadFolderUrl()?.URLByAppendingPathComponent(URL.lastPathComponent!) {
+                self.destinationPathUrl = destinationURL
+            } else {
+                return nil
+            }
+        }
+        self.id = self.sourceUrl.absoluteString
+        self.sourceUrl = URL
+        self.delegate = delegate
+    }
+    
     // MARK: - Initializer
     public init(id: String, sourceUrl: NSURL, destinationPathUrl: NSURL, delegate: DownloadTaskDelegate?) {
         super.init()
         self.id = id
         self.sourceUrl = sourceUrl
         self.destinationPathUrl = destinationPathUrl
-        
-        if let tempFolder = DownloadManager.downloadFolderUrl() {
-            self.temporaryPathUrl = tempFolder.URLByAppendingPathComponent(destinationPathUrl.lastPathComponent!)
-            self.delegate = delegate
-        }
+        self.delegate = delegate
     }
     
     // MARK: - Functions
@@ -126,12 +135,12 @@ public class DownloadTask: ConcurrentOperation {
             }
         })
         do {
-            if NSFileManager.defaultManager().fileExistsAtPath(self.temporaryPathUrl.path!) {
-                try NSFileManager.defaultManager().removeItemAtPath(self.temporaryPathUrl.path!)
+            if NSFileManager.defaultManager().fileExistsAtPath(self.temporaryPathUrl().path!) {
+                try NSFileManager.defaultManager().removeItemAtPath(self.temporaryPathUrl().path!)
             }
             log.debug("Start download file to path url: \(self.temporaryPathUrl), destination path url: \(self.destinationPathUrl)")
             self.request = Alamofire.download(Method.GET, self.sourceUrl, destination: { (url, response) -> NSURL in
-                return self.temporaryPathUrl
+                return self.temporaryPathUrl()
             }).progress({ [weak self] (bytesRead, totalBytesRead, totalBytesExpectedToRead) -> Void in
                 let progress = Double(totalBytesRead) / Double(totalBytesExpectedToRead)
                 self?.delegate?.downloadTask?(self!, downloadProgress: Float(progress))
@@ -148,6 +157,13 @@ public class DownloadTask: ConcurrentOperation {
     }
     
     /**
+     Temporary path on disk before it is copied over to destination path
+     */
+    func temporaryPathUrl() -> NSURL {
+        return NSURL(fileURLWithPath: NSTemporaryDirectory()).URLByAppendingPathComponent(destinationPathUrl.lastPathComponent!)
+    }
+    
+    /**
     Callback when download is completed, whether fail or success
     */
     public func downloadCompletionCallback(request: NSURLRequest?, response: NSHTTPURLResponse?, result: NSData?, error: NSError?) {
@@ -159,7 +175,7 @@ public class DownloadTask: ConcurrentOperation {
                 if NSFileManager.defaultManager().fileExistsAtPath(self.destinationPathUrl.path!) {
                     try NSFileManager.defaultManager().removeItemAtPath(self.destinationPathUrl.path!)
                 }
-                try NSFileManager.defaultManager().moveItemAtPath(self.temporaryPathUrl.path!, toPath: self.destinationPathUrl.path!)
+                try NSFileManager.defaultManager().moveItemAtPath(self.temporaryPathUrl().path!, toPath: self.destinationPathUrl.path!)
                 self.delegate?.downloadTask?(self, completedWithFileURL: self.destinationPathUrl)
             } catch let error {
                 self.delegate?.downloadTask?(self, failedWithError: error as NSError)
@@ -170,7 +186,7 @@ public class DownloadTask: ConcurrentOperation {
         log.error("Download file failed with error: \(error)")
         self.delegate?.downloadTask?(self, failedWithError: error)
         do {
-            try NSFileManager.defaultManager().removeItemAtPath(self.temporaryPathUrl.path!)
+            try NSFileManager.defaultManager().removeItemAtPath(self.temporaryPathUrl().path!)
         } catch {
         }
     }
@@ -184,7 +200,7 @@ public class DownloadTask: ConcurrentOperation {
         self.request?.cancel()
         self.request = nil
         do {
-            try NSFileManager.defaultManager().removeItemAtPath(self.temporaryPathUrl.path!)
+            try NSFileManager.defaultManager().removeItemAtPath(self.temporaryPathUrl().path!)
         } catch {
         }
     }
