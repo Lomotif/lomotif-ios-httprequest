@@ -10,7 +10,7 @@ import Foundation
 import Alamofire
 
 // MARK: - Downloadable Protocol
-protocol Downloadable {
+public protocol Downloadable {
     
     /**
      Ask the delegate to provide download URL
