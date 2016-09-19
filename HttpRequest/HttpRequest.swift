@@ -10,14 +10,6 @@ import Foundation
 import Alamofire
 import XCGLogger
 
-// MARK: - typealias
-public typealias HttpHeaders = [String: String]
-public typealias HttpBody = [String: AnyObject]
-public typealias Request = Alamofire.Request
-public typealias Method = Alamofire.HTTPMethod
-public typealias URLConvertible = Alamofire.URLConvertible
-public typealias URLRequestConvertible = Alamofire.URLRequestConvertible
-
 // XCGLogger
 let log: XCGLogger = {
     let instance = XCGLogger.default
@@ -38,9 +30,9 @@ let log: XCGLogger = {
 open class HttpRequest: NSObject {
     
     // MARK: - Properties
-    open var authorizationHeaders: HttpHeaders = [:]
-    open var agentHeaders: HttpHeaders = [:]
-    open var refererHeaders: HttpHeaders = [:]
+    open var authorizationHeaders: HTTPHeaders = [:]
+    open var agentHeaders: HTTPHeaders = [:]
+    open var refererHeaders: HTTPHeaders = [:]
     open var alamofireManager: SessionManager!
     open var timeoutInterval: TimeInterval = 30 {
         didSet {
@@ -68,21 +60,21 @@ open class HttpRequest: NSObject {
     /**
      Set client authorization headers
      */
-    open class func setAuthorizationHeader(_ headers: HttpHeaders) {
+    open class func setAuthorizationHeader(_ headers: HTTPHeaders) {
         sharedInstance().authorizationHeaders = headers
     }
     
     /**
      Set client agent headers headers
      */
-    open class func setAgentHeader(_ headers: HttpHeaders) {
+    open class func setAgentHeader(_ headers: HTTPHeaders) {
         sharedInstance().agentHeaders = headers
     }
     
     /**
      Set client agent headers headers
      */
-    open class func setRefererHeader(_ headers: HttpHeaders) {
+    open class func setRefererHeader(_ headers: HTTPHeaders) {
         sharedInstance().refererHeaders = headers
     }
     
@@ -96,9 +88,9 @@ open class HttpRequest: NSObject {
      - parameter requiredAuthorization: Is the request call authenticated? Default value is false
      - returns: A request instance
      */
-    open class func request(_ method: Method = .get, _ URLString: URLConvertible, headers: HttpHeaders? = nil, body: HttpBody? = nil, requiredAuthorization: Bool = false) -> DataRequest {
+    open class func request(_ method: HTTPMethod = .get, _ URLString: URLConvertible, headers: HTTPHeaders? = nil, body: Parameters? = nil, requiredAuthorization: Bool = false) -> DataRequest {
         let encoding: ParameterEncoding = method == .get ? URLEncoding(destination: .httpBody) : JSONEncoding(options: .prettyPrinted)
-        var requestHeaders: HttpHeaders = self.buildRequestHeader(requiredAuthorization)
+        var requestHeaders: HTTPHeaders = self.buildRequestHeader(requiredAuthorization)
         requestHeaders.append(headers)
         log.debug("Url: \(URLString), Method: \(method) \nHeader: \(requestHeaders)\nParameters: \(body)")
         return sharedInstance().alamofireManager.request(URLString, method: method, parameters: body, encoding: encoding, headers: requestHeaders)
@@ -123,7 +115,7 @@ open class HttpRequest: NSObject {
      - parameter requiredAuthorization: Is the request call authenticated? Default value is false
      - returns: A request instance
      */
-    open class func GET(_ URLString: URLConvertible, headers: HttpHeaders? = nil, body: HttpBody? = nil, requiredAuthorization: Bool = false) -> DataRequest {
+    open class func GET(_ URLString: URLConvertible, headers: HTTPHeaders? = nil, body: Parameters? = nil, requiredAuthorization: Bool = false) -> DataRequest {
         return request(.get, URLString, headers: headers, body: body, requiredAuthorization: requiredAuthorization)
     }
     
@@ -136,7 +128,7 @@ open class HttpRequest: NSObject {
      - parameter requiredAuthorization: Is the request call authenticated? Default value is false
      - returns: A request instance
      */
-    open class func POST(_ URLString: URLConvertible, headers: HttpHeaders? = nil, body: HttpBody? = nil, requiredAuthorization: Bool = false) -> DataRequest {
+    open class func POST(_ URLString: URLConvertible, headers: HTTPHeaders? = nil, body: Parameters? = nil, requiredAuthorization: Bool = false) -> DataRequest {
         return request(.post, URLString, headers: headers, body: body, requiredAuthorization: requiredAuthorization)
     }
     
@@ -149,7 +141,7 @@ open class HttpRequest: NSObject {
      - parameter requiredAuthorization: Is the request call authenticated? Default value is false
      - returns: A request instance
      */
-    open class func PUT(_ URLString: URLConvertible, headers: HttpHeaders? = nil, body: HttpBody? = nil, requiredAuthorization: Bool = false) -> DataRequest {
+    open class func PUT(_ URLString: URLConvertible, headers: HTTPHeaders? = nil, body: Parameters? = nil, requiredAuthorization: Bool = false) -> DataRequest {
         return request(.put, URLString, headers: headers, body: body, requiredAuthorization: requiredAuthorization)
     }
     
@@ -162,7 +154,7 @@ open class HttpRequest: NSObject {
      - parameter requiredAuthorization: Is the request call authenticated? Default value is false
      - returns: A request instance
      */
-    open class func DELETE(_ URLString: URLConvertible, headers: HttpHeaders? = nil, body: HttpBody? = nil, requiredAuthorization: Bool = false) -> DataRequest {
+    open class func DELETE(_ URLString: URLConvertible, headers: HTTPHeaders? = nil, body: Parameters? = nil, requiredAuthorization: Bool = false) -> DataRequest {
         return request(.delete, URLString, headers: headers, body: body, requiredAuthorization: requiredAuthorization)
     }
     
@@ -172,8 +164,8 @@ open class HttpRequest: NSObject {
      - parameter requiredAuthorization: Is the request call authenticated? Default value is false
      - returns: The request headers
      */
-    open class func buildRequestHeader(_ requiredAuthorization: Bool) -> HttpHeaders {
-        var requestHeaders: HttpHeaders!
+    open class func buildRequestHeader(_ requiredAuthorization: Bool) -> HTTPHeaders {
+        var requestHeaders: HTTPHeaders!
         if requiredAuthorization {
             requestHeaders = sharedInstance().authorizationHeaders
             requestHeaders.append(sharedInstance().agentHeaders)

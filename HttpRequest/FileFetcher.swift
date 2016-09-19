@@ -25,8 +25,8 @@ open class FileFetcher: Fetcher<Data> {
     // MARK: - Properties
     open var url: URLConvertible?
     open var URLRequest: URLRequestConvertible?
-    open var headers: HttpHeaders?
-    open var body: HttpBody?
+    open var headers: HTTPHeaders?
+    open var body: Parameters?
     open var request: DataRequest?
     open var formatName: String!
     open var successHandler: SuccessHandler?
@@ -35,7 +35,7 @@ open class FileFetcher: Fetcher<Data> {
     open var cache: Cache<Data> = Shared.fileCache
     
     // MARK: - Initializer
-    public init?(key: String? = nil, url: URLConvertible, headers: HttpHeaders? = nil, body: HttpBody? = nil, formatName: String = HanekeGlobals.Cache.OriginalFormatName) {
+    public init?(key: String? = nil, url: URLConvertible, headers: HTTPHeaders? = nil, body: Parameters? = nil, formatName: String = HanekeGlobals.Cache.OriginalFormatName) {
         var urlString: String!
         do {
             urlString = try url.asURL().absoluteString
@@ -124,7 +124,7 @@ public extension Cache {
      - paramater success: Success handler block
      - returns: FileFetcher instance
      */
-    public func fetchFile(_ url: URLConvertible, headers: HttpHeaders? = nil, body: HttpBody? = nil, formatName: String, failure: @escaping FileFetcher.FailureHandler, success: @escaping FileFetcher.SuccessHandler) -> FileFetcher? {
+    public func fetchFile(_ url: URLConvertible, headers: HTTPHeaders? = nil, body: Parameters? = nil, formatName: String, failure: @escaping FileFetcher.FailureHandler, success: @escaping FileFetcher.SuccessHandler) -> FileFetcher? {
         guard let fetcher = FileFetcher(url: url, headers: headers, body: body, formatName: formatName) else {
             return nil
         }
