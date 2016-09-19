@@ -14,50 +14,51 @@ import XCGLogger
 public typealias HttpHeaders = [String: String]
 public typealias HttpBody = [String: AnyObject]
 public typealias Request = Alamofire.Request
-public typealias Method = Alamofire.Method
-public typealias URLStringConvertible = Alamofire.URLStringConvertible
+public typealias Method = Alamofire.HTTPMethod
+public typealias URLConvertible = Alamofire.URLConvertible
 public typealias URLRequestConvertible = Alamofire.URLRequestConvertible
 
 // XCGLogger
 let log: XCGLogger = {
-    let instance = XCGLogger.defaultInstance()
-    instance.xcodeColorsEnabled = true // Or set the XcodeColors environment variable in your scheme to YES
-    instance.xcodeColors = [
-        .Verbose: .lightGrey,
-        .Debug: .darkGrey,
-        .Info: .darkGreen,
-        .Warning: .orange,
-        .Error: XCGLogger.XcodeColor(fg: UIColor.redColor()), // Optionally use a UIColor
-        .Severe: XCGLogger.XcodeColor(fg: (255, 255, 255), bg: (255, 0, 0)) // Optionally use RGB values directly
-    ]
+    let instance = XCGLogger.default
+// Plug-ins do not work in Xcode 8
+//    instance.xcodeColorsEnabled = true // Or set the XcodeColors environment variable in your scheme to YES
+//    instance.xcodeColors = [
+//        .verbose: .lightGrey,
+//        .debug: .darkGrey,
+//        .info: .darkGreen,
+//        .warning: .orange,
+//        .error: XCGLogger.XcodeColor(fg: UIColor.red), // Optionally use a UIColor
+//        .severe: XCGLogger.XcodeColor(fg: (255, 255, 255), bg: (255, 0, 0)) // Optionally use RGB values directly
+//    ]
     return instance
 }()
 
 // MARK: - HttpRequest which handles all the http request call
-public class HttpRequest: NSObject {
+open class HttpRequest: NSObject {
     
     // MARK: - Properties
-    public var authorizationHeaders: HttpHeaders = [:]
-    public var agentHeaders: HttpHeaders = [:]
-    public var refererHeaders: HttpHeaders = [:]
-    public var alamofireManager: Manager!
-    public var timeoutInterval: NSTimeInterval = 30 {
+    open var authorizationHeaders: HttpHeaders = [:]
+    open var agentHeaders: HttpHeaders = [:]
+    open var refererHeaders: HttpHeaders = [:]
+    open var alamofireManager: SessionManager!
+    open var timeoutInterval: TimeInterval = 30 {
         didSet {
-            alamofireManager = Alamofire.Manager(configuration: HttpRequest.configurationWithTimeoutInterval(timeoutInterval))
+            alamofireManager = Alamofire.SessionManager(configuration: HttpRequest.configurationWithTimeoutInterval(timeoutInterval))
         }
     }
     
     // MARK: - Initializer
     public override init() {
         super.init()
-        alamofireManager = Alamofire.Manager(configuration: HttpRequest.configurationWithTimeoutInterval(timeoutInterval))
+        alamofireManager = Alamofire.SessionManager(configuration: HttpRequest.configurationWithTimeoutInterval(timeoutInterval))
     }
     
     // MARK: - Functions
     /**
      HttpRequest shared instance
      */
-    public class func sharedInstance() -> HttpRequest {
+    open class func sharedInstance() -> HttpRequest {
         struct Singleton {
             static let instance = HttpRequest()
         }
@@ -67,21 +68,21 @@ public class HttpRequest: NSObject {
     /**
      Set client authorization headers
      */
-    public class func setAuthorizationHeader(headers: HttpHeaders) {
+    open class func setAuthorizationHeader(_ headers: HttpHeaders) {
         sharedInstance().authorizationHeaders = headers
     }
     
     /**
      Set client agent headers headers
      */
-    public class func setAgentHeader(headers: HttpHeaders) {
+    open class func setAgentHeader(_ headers: HttpHeaders) {
         sharedInstance().agentHeaders = headers
     }
     
     /**
      Set client agent headers headers
      */
-    public class func setRefererHeader(headers: HttpHeaders) {
+    open class func setRefererHeader(_ headers: HttpHeaders) {
         sharedInstance().refererHeaders = headers
     }
     
@@ -95,12 +96,12 @@ public class HttpRequest: NSObject {
      - parameter requiredAuthorization: Is the request call authenticated? Default value is false
      - returns: A request instance
      */
-    public class func request(method: Method = .GET, _ URLString: URLStringConvertible, headers: HttpHeaders? = nil, body: HttpBody? = nil, requiredAuthorization: Bool = false) -> Request {
-        let encoding = method == .GET ? ParameterEncoding.URL : ParameterEncoding.JSON
+    open class func request(_ method: Method = .get, _ URLString: URLConvertible, headers: HttpHeaders? = nil, body: HttpBody? = nil, requiredAuthorization: Bool = false) -> DataRequest {
+        let encoding: ParameterEncoding = method == .get ? URLEncoding(destination: .httpBody) : JSONEncoding(options: .prettyPrinted)
         var requestHeaders: HttpHeaders = self.buildRequestHeader(requiredAuthorization)
         requestHeaders.append(headers)
         log.debug("Url: \(URLString), Method: \(method) \nHeader: \(requestHeaders)\nParameters: \(body)")
-        return sharedInstance().alamofireManager.request(method, URLString, parameters: body, encoding: encoding, headers: requestHeaders)
+        return sharedInstance().alamofireManager.request(URLString, method: method, parameters: body, encoding: encoding, headers: requestHeaders)
     }
     
     /**
@@ -109,7 +110,7 @@ public class HttpRequest: NSObject {
      - parameter request: URL request instance
      - returns: A request instance
      */
-    public class func request(request: URLRequestConvertible) -> Request {
+    open class func request(_ request: URLRequestConvertible) -> DataRequest {
         return sharedInstance().alamofireManager.request(request)
     }
     
@@ -122,8 +123,8 @@ public class HttpRequest: NSObject {
      - parameter requiredAuthorization: Is the request call authenticated? Default value is false
      - returns: A request instance
      */
-    public class func GET(URLString: URLStringConvertible, headers: HttpHeaders? = nil, body: HttpBody? = nil, requiredAuthorization: Bool = false) -> Request {
-        return request(.GET, URLString, body: body, headers: headers, requiredAuthorization: requiredAuthorization)
+    open class func GET(_ URLString: URLConvertible, headers: HttpHeaders? = nil, body: HttpBody? = nil, requiredAuthorization: Bool = false) -> DataRequest {
+        return request(.get, URLString, headers: headers, body: body, requiredAuthorization: requiredAuthorization)
     }
     
     /**
@@ -135,8 +136,8 @@ public class HttpRequest: NSObject {
      - parameter requiredAuthorization: Is the request call authenticated? Default value is false
      - returns: A request instance
      */
-    public class func POST(URLString: URLStringConvertible, headers: HttpHeaders? = nil, body: HttpBody? = nil, requiredAuthorization: Bool = false) -> Request {
-        return request(.POST, URLString, body: body, headers: headers, requiredAuthorization: requiredAuthorization)
+    open class func POST(_ URLString: URLConvertible, headers: HttpHeaders? = nil, body: HttpBody? = nil, requiredAuthorization: Bool = false) -> DataRequest {
+        return request(.post, URLString, headers: headers, body: body, requiredAuthorization: requiredAuthorization)
     }
     
     /**
@@ -148,8 +149,8 @@ public class HttpRequest: NSObject {
      - parameter requiredAuthorization: Is the request call authenticated? Default value is false
      - returns: A request instance
      */
-    public class func PUT(URLString: URLStringConvertible, headers: HttpHeaders? = nil, body: HttpBody? = nil, requiredAuthorization: Bool = false) -> Request {
-        return request(.PUT, URLString, body: body, headers: headers, requiredAuthorization: requiredAuthorization)
+    open class func PUT(_ URLString: URLConvertible, headers: HttpHeaders? = nil, body: HttpBody? = nil, requiredAuthorization: Bool = false) -> DataRequest {
+        return request(.put, URLString, headers: headers, body: body, requiredAuthorization: requiredAuthorization)
     }
     
     /**
@@ -161,8 +162,8 @@ public class HttpRequest: NSObject {
      - parameter requiredAuthorization: Is the request call authenticated? Default value is false
      - returns: A request instance
      */
-    public class func DELETE(URLString: URLStringConvertible, headers: HttpHeaders? = nil, body: HttpBody? = nil, requiredAuthorization: Bool = false) -> Request {
-        return request(.DELETE, URLString, body: body, headers: headers, requiredAuthorization: requiredAuthorization)
+    open class func DELETE(_ URLString: URLConvertible, headers: HttpHeaders? = nil, body: HttpBody? = nil, requiredAuthorization: Bool = false) -> DataRequest {
+        return request(.delete, URLString, headers: headers, body: body, requiredAuthorization: requiredAuthorization)
     }
     
     /**
@@ -171,7 +172,7 @@ public class HttpRequest: NSObject {
      - parameter requiredAuthorization: Is the request call authenticated? Default value is false
      - returns: The request headers
      */
-    public class func buildRequestHeader(requiredAuthorization: Bool) -> HttpHeaders {
+    open class func buildRequestHeader(_ requiredAuthorization: Bool) -> HttpHeaders {
         var requestHeaders: HttpHeaders!
         if requiredAuthorization {
             requestHeaders = sharedInstance().authorizationHeaders
@@ -190,8 +191,8 @@ public class HttpRequest: NSObject {
      - parameter timeoutInterval: timeout interval for network request
      - returns: The URL session configuration instance
      */
-    public class func configurationWithTimeoutInterval(timeoutInterval: NSTimeInterval) -> NSURLSessionConfiguration {
-        let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
+    open class func configurationWithTimeoutInterval(_ timeoutInterval: TimeInterval) -> URLSessionConfiguration {
+        let configuration = URLSessionConfiguration.default
         configuration.timeoutIntervalForRequest = timeoutInterval
         return configuration
     }
@@ -201,25 +202,13 @@ public class HttpRequest: NSObject {
 // MARK: - Alamofire Request extension
 extension Request {
     
-    public func timeout(requestTimeoutHandler: (url: NSURL?, error: NSError?) -> Void) -> Self {
-        return response { (request, response, data, error) -> Void in
-            if let error = error where self.isConnectionTimeoutError(error) {
-                var url: NSURL?
-                if let failingURLString = error.userInfo["NSErrorFailingURLStringKey"] as? String {
-                    url = NSURL(string: failingURLString)
-                }
-                requestTimeoutHandler(url: url, error: error)
-            }
-        }
-    }
-    
     /**
      Check if the error is connection timeout
      
      - parameter error: The error object
      - returns: Return true if the request is connection timeout, false otherwise
      */
-    public func isConnectionTimeoutError(error: NSError) -> Bool {
+    public func isConnectionTimeoutError(_ error: NSError) -> Bool {
         return error.isConnectionTimeoutError()
     }
     

@@ -22,36 +22,36 @@ import UIKit
 ///   necessary and then ensuring that `completeOperation()` is called; or
 ///   override `cancel` method, calling `super.cancel()` and then cleaning-up
 ///   and ensuring `completeOperation()` is called.
-public class ConcurrentOperation: NSOperation {
+open class ConcurrentOperation: Operation {
    
-    override public var asynchronous: Bool {
+    override open var isAsynchronous: Bool {
         return true
     }
     
-    private var _executing: Bool = false
-    override public var executing: Bool {
+    fileprivate var _executing: Bool = false
+    override open var isExecuting: Bool {
         get {
             return _executing
         }
         set {
             if (_executing != newValue) {
-                self.willChangeValueForKey("isExecuting")
+                self.willChangeValue(forKey: "isExecuting")
                 _executing = newValue
-                self.didChangeValueForKey("isExecuting")
+                self.didChangeValue(forKey: "isExecuting")
             }
         }
     }
     
-    private var _finished: Bool = false;
-    override public var finished: Bool {
+    fileprivate var _finished: Bool = false;
+    override open var isFinished: Bool {
         get {
             return _finished
         }
         set {
             if (_finished != newValue) {
-                self.willChangeValueForKey("isFinished")
+                self.willChangeValue(forKey: "isFinished")
                 _finished = newValue
-                self.didChangeValueForKey("isFinished")
+                self.didChangeValue(forKey: "isFinished")
             }
         }
     }
@@ -59,17 +59,17 @@ public class ConcurrentOperation: NSOperation {
     /// Complete the operation
     ///
     /// This will result in the appropriate KVN of isFinished and isExecuting
-    public func completeOperation() {
-        self.executing = false
-        self.finished  = true
+    open func completeOperation() {
+        self.isExecuting = false
+        self.isFinished  = true
     }
     
-    override public func start() {
-        if self.cancelled {
-            self.finished = true
+    override open func start() {
+        if self.isCancelled {
+            self.isFinished = true
             return
         }
-        self.executing = true
+        self.isExecuting = true
     }
     
 }

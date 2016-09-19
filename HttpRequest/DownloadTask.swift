@@ -24,14 +24,14 @@ public protocol Downloadable {
      
      - returns: URL to fetch the file
      */
-    func downloadURL() -> NSURL?
+    func downloadURL() -> URL?
     
     /**
      Ask the delegate to provide download destination URL
      
      - returns: URL on disk to download the file to
      */
-    func downloadFilePathURL() -> NSURL?
+    func downloadFilePathURL() -> URL?
     
 }
 
@@ -46,21 +46,21 @@ public protocol Downloadable {
      
      - parameter progress: Download progress with scale from 0 to 1
      */
-    optional func downloadTask(task: DownloadTask, downloadProgress progress: Float)
+    @objc optional func downloadTask(_ task: DownloadTask, downloadProgress progress: Float)
     
     /**
      Callback when download has failed
      
      - parameter error: An error instance describing the issue
      */
-    optional func downloadTask(task: DownloadTask, failedWithError error: NSError)
+    @objc optional func downloadTask(_ task: DownloadTask, failedWithError error: Error)
     
     /**
      Callback when download has completed
      
      - parameter url: An URL to the downloaded file if available
      */
-    optional func downloadTask(task: DownloadTask, completedWithFileURL URL: NSURL)
+    @objc optional func downloadTask(_ task: DownloadTask, completedWithFileURL URL: URL)
     
 }
 
@@ -68,43 +68,43 @@ public protocol Downloadable {
 /**
  This class is a wrapper class for Alamofire download request class. When the downloading task is created and start, it will be added to the background task, and be removed when download has failed or completed.
  */
-public class DownloadTask: ConcurrentOperation {
+open class DownloadTask: ConcurrentOperation {
     
     // MARK: - Properties
     /**
      ID for download task
      */
-    public private(set) var id: String!
+    open fileprivate(set) var id: String!
     
     /**
      Identifier for background download task
      */
-    public private(set) var backgroundTaskIdentifier: UIBackgroundTaskIdentifier!
+    open fileprivate(set) var backgroundTaskIdentifier: UIBackgroundTaskIdentifier!
     
     /**
      Source url of the file to be downloaded
      */
-    public private(set) var sourceUrl: NSURL!
+    open fileprivate(set) var sourceUrl: URL!
     
     /**
      Destination path on disk where the file should be downloaded to
      */
-    public private(set) var destinationPathUrl: NSURL!
+    open fileprivate(set) var destinationPathUrl: URL!
     
     /**
      Network request instance used for download
      */
-    public private(set) var request: Request!
+    open fileprivate(set) var request: DownloadRequest!
     
     /**
      Flag to check if we should download and overwrite existing file
      */
-    public var shouldOverwrite: Bool = false
+    open var shouldOverwrite: Bool = false
     
     /**
      The delegate instance for callback
      */
-    public weak var delegate: DownloadTaskDelegate?
+    open weak var delegate: DownloadTaskDelegate?
     
     public init?(downloadable: Downloadable, delegate: DownloadTaskDelegate? = nil) {
         guard let URL = downloadable.downloadURL() else {
@@ -113,7 +113,7 @@ public class DownloadTask: ConcurrentOperation {
         super.init()
         self.destinationPathUrl = downloadable.downloadFilePathURL()
         if self.destinationPathUrl == nil {
-            if let destinationURL = DownloadManager.downloadFolderUrl()?.URLByAppendingPathComponent(URL.lastPathComponent!) {
+            if let destinationURL = DownloadManager.downloadFolderUrl()?.appendingPathComponent(URL.lastPathComponent) {
                 self.destinationPathUrl = destinationURL
             } else {
                 return nil
@@ -125,7 +125,7 @@ public class DownloadTask: ConcurrentOperation {
     }
     
     // MARK: - Initializer
-    public init(id: String, sourceUrl: NSURL, destinationPathUrl: NSURL, delegate: DownloadTaskDelegate?) {
+    public init(id: String, sourceUrl: URL, destinationPathUrl: URL, delegate: DownloadTaskDelegate?) {
         super.init()
         self.id = id
         self.sourceUrl = sourceUrl
@@ -137,62 +137,54 @@ public class DownloadTask: ConcurrentOperation {
     /**
      Start download task
      */
-    public override func start() {
+    open override func start() {
         super.start()
-        if NSFileManager.defaultManager().fileExistsAtPath(self.destinationPathUrl!.path!) && !self.shouldOverwrite {
+        if FileManager.default.fileExists(atPath: self.destinationPathUrl!.path) && !self.shouldOverwrite {
             self.completeOperation()
             self.delegate?.downloadTask?(self, completedWithFileURL: self.destinationPathUrl!)
             return
         }
         // start background downloading task
-        self.backgroundTaskIdentifier = UIApplication.sharedApplication().beginBackgroundTaskWithExpirationHandler({ () -> Void in
+        self.backgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask(expirationHandler: { () -> Void in
             // task expired
             if self.backgroundTaskIdentifier != UIBackgroundTaskInvalid {
                 self.endBackgroundTask()
             }
         })
-        do {
-            if NSFileManager.defaultManager().fileExistsAtPath(self.temporaryPathUrl().path!) {
-                try NSFileManager.defaultManager().removeItemAtPath(self.temporaryPathUrl().path!)
-            }
-            log.debug("Start download file to path url: \(self.temporaryPathUrl), destination path url: \(self.destinationPathUrl)")
-            self.request = Alamofire.download(Method.GET, self.sourceUrl, destination: { (url, response) -> NSURL in
-                return self.temporaryPathUrl()
-            }).progress({ [weak self] (bytesRead, totalBytesRead, totalBytesExpectedToRead) -> Void in
-                let progress = Double(totalBytesRead) / Double(totalBytesExpectedToRead)
-                self?.delegate?.downloadTask?(self!, downloadProgress: Float(progress))
-                }).response(completionHandler: { [weak self] (request, response, data, error) -> Void in
-                    self?.downloadCompletionCallback(request, response: response, result: data, error: error)
-                    })
-        } catch {
-        }
+        log.debug("Start download file to path url: \(self.temporaryPathUrl()), destination path url: \(self.destinationPathUrl)")
+        self.request = Alamofire.download(self.sourceUrl, to: { (url, response) -> (destinationURL: URL, options: DownloadRequest.DownloadOptions) in
+            return (self.temporaryPathUrl(), [.removePreviousFile, .createIntermediateDirectories])
+        }).downloadProgress(closure: { [weak self] (progress) in
+            let downloadProgress = Double(progress.completedUnitCount) / Double(progress.totalUnitCount)
+            self?.delegate?.downloadTask?(self!, downloadProgress: Float(downloadProgress))
+            }).response(completionHandler: downloadCompletionCallback)
     }
     
-    public func endBackgroundTask() {
-        UIApplication.sharedApplication().endBackgroundTask(self.backgroundTaskIdentifier)
+    open func endBackgroundTask() {
+        UIApplication.shared.endBackgroundTask(self.backgroundTaskIdentifier)
         self.backgroundTaskIdentifier = UIBackgroundTaskInvalid
     }
     
     /**
      Temporary path on disk before it is copied over to destination path
      */
-    func temporaryPathUrl() -> NSURL {
-        return NSURL(fileURLWithPath: NSTemporaryDirectory()).URLByAppendingPathComponent(destinationPathUrl.lastPathComponent!)
+    func temporaryPathUrl() -> URL {
+        return URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(destinationPathUrl.lastPathComponent)
     }
     
     /**
      Callback when download is completed, whether fail or success
      */
-    public func downloadCompletionCallback(request: NSURLRequest?, response: NSHTTPURLResponse?, result: NSData?, error: NSError?) {
+    open func downloadCompletionCallback(response: DefaultDownloadResponse) {
         self.endBackgroundTask()
         self.completeOperation()
-        guard let error = error else {
+        guard let error = response.error else {
             log.debug("File downloaded, moving file from \(self.temporaryPathUrl) to \(self.destinationPathUrl)")
             do {
-                if NSFileManager.defaultManager().fileExistsAtPath(self.destinationPathUrl.path!) {
-                    try NSFileManager.defaultManager().removeItemAtPath(self.destinationPathUrl.path!)
+                if FileManager.default.fileExists(atPath: self.destinationPathUrl.path) {
+                    try FileManager.default.removeItem(atPath: self.destinationPathUrl.path)
                 }
-                try NSFileManager.defaultManager().moveItemAtPath(self.temporaryPathUrl().path!, toPath: self.destinationPathUrl.path!)
+                try FileManager.default.moveItem(atPath: self.temporaryPathUrl().path, toPath: self.destinationPathUrl.path)
                 self.delegate?.downloadTask?(self, completedWithFileURL: self.destinationPathUrl)
             } catch let error {
                 self.delegate?.downloadTask?(self, failedWithError: error as NSError)
@@ -203,7 +195,7 @@ public class DownloadTask: ConcurrentOperation {
         log.error("Download file failed with error: \(error)")
         self.delegate?.downloadTask?(self, failedWithError: error)
         do {
-            try NSFileManager.defaultManager().removeItemAtPath(self.temporaryPathUrl().path!)
+            try FileManager.default.removeItem(atPath: self.temporaryPathUrl().path)
         } catch {
         }
     }
@@ -211,13 +203,13 @@ public class DownloadTask: ConcurrentOperation {
     /**
      Cancel download task
      */
-    public override func cancel() {
+    open override func cancel() {
         self.delegate = nil
         super.cancel()
         self.request?.cancel()
         self.request = nil
         do {
-            try NSFileManager.defaultManager().removeItemAtPath(self.temporaryPathUrl().path!)
+            try FileManager.default.removeItem(atPath: self.temporaryPathUrl().path)
         } catch {
         }
     }

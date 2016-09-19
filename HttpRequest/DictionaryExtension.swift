@@ -10,7 +10,7 @@ import Foundation
 
 public extension Dictionary {
     
-    mutating func append(dictionary: Dictionary?) {
+    mutating func append(_ dictionary: Dictionary?) {
         if dictionary == nil {
             return
         }

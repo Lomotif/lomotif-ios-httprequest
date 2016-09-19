@@ -9,15 +9,15 @@
 import Foundation
 
 // MARK: - DownloadManager class, handle all background downloads
-public class DownloadManager: NSObject {
+open class DownloadManager: NSObject {
     
     // MARK: - Properties
     /**
      Network request queue
      */
-    public dynamic private(set) lazy var queue: NSOperationQueue = {
+    open dynamic fileprivate(set) lazy var queue: OperationQueue = {
         let maxOperationCount = 5
-        let queue = NSOperationQueue()
+        let queue = OperationQueue()
         queue.maxConcurrentOperationCount = maxOperationCount
         return queue
     }()
@@ -25,20 +25,20 @@ public class DownloadManager: NSObject {
     // MARK: - Initializer
     public override init() {
         super.init()
-        self.addObserver(self, forKeyPath: "queue.operations", options: NSKeyValueObservingOptions.New, context: nil)
+        self.addObserver(self, forKeyPath: "queue.operations", options: NSKeyValueObservingOptions.new, context: nil)
     }
     
     /**
      Start a download task
      */
-    public func startDownloadTask(task: DownloadTask) {
+    open func startDownloadTask(_ task: DownloadTask) {
         self.queue.addOperation(task)
     }
     
     /**
      Cancel all download tasks
      */
-    public func cancelAllDownloadTasks() {
+    open func cancelAllDownloadTasks() {
         self.queue.cancelAllOperations()
     }
     
@@ -47,7 +47,7 @@ public class DownloadManager: NSObject {
     }
     
     // MARK: - Key-value Observer
-    public override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+    open override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "queue.operations" {
             log.debug("Number of downloading task: \(self.queue.operations.count)")
         }
@@ -56,7 +56,7 @@ public class DownloadManager: NSObject {
     /**
      HttpRequest shared instance
      */
-    public class func sharedInstance() -> DownloadManager {
+    open class func sharedInstance() -> DownloadManager {
         struct Singleton {
             static let instance = DownloadManager()
         }
@@ -66,15 +66,15 @@ public class DownloadManager: NSObject {
     /**
      Get temporary download folder url
      */
-    public class func downloadFolderUrl() -> NSURL? {
-        let folderPathUrl = NSURL(fileURLWithPath: NSTemporaryDirectory()).URLByAppendingPathComponent("download")
+    open class func downloadFolderUrl() -> URL? {
+        let folderPathUrl = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("download")
         
         // create folder if it does not exist yet
-        if !NSFileManager.defaultManager().fileExistsAtPath(folderPathUrl.path!) {
+        if !FileManager.default.fileExists(atPath: folderPathUrl.path) {
             do {
-                try NSFileManager.defaultManager().createDirectoryAtURL(folderPathUrl, withIntermediateDirectories: true, attributes: nil)
+                try FileManager.default.createDirectory(at: folderPathUrl, withIntermediateDirectories: true, attributes: nil)
             } catch {
-                log.error("Create folder failed at path: \(folderPathUrl.path!)")
+                log.error("Create folder failed at path: \(folderPathUrl.path)")
                 return nil
             }
         }
