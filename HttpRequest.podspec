@@ -12,7 +12,6 @@ Pod::Spec.new do |s|
     s.source = { :git => "https://github.com/Lomotif/lomotif-ios-httprequest.git", :tag => "#{s.version}"}
     s.framework = 'Foundation'
     s.dependency 'Alamofire'
-    s.dependency 'AlamofireImage'
     s.dependency 'HanekeSwift'
     s.dependency 'XCGLogger'
     s.source_files = "HttpRequest/*.{h,swift}"
