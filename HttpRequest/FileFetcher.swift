@@ -8,6 +8,7 @@
 
 import Foundation
 import Haneke
+import Alamofire
 
 typealias FileCache = Haneke.Cache
 
@@ -15,35 +16,44 @@ typealias FileCache = Haneke.Cache
 /**
  Custom fetcher class
  */
-public class FileFetcher: Fetcher<NSData> {
+open class FileFetcher: Fetcher<Data> {
     
-    public typealias SuccessHandler = (NSData) -> ()
-    public typealias FailureHandler = (NSError?) -> ()
-    public typealias ProgressHandler = ((Int64, Int64, Int64) -> Void)
+    public typealias SuccessHandler = (Data) -> ()
+    public typealias FailureHandler = (Error?) -> ()
+    public typealias ProgressHandler = (Progress) -> ()
     
     // MARK: - Properties
-    public var URL: URLStringConvertible?
-    public var URLRequest: URLRequestConvertible?
-    public var headers: HttpHeaders?
-    public var body: HttpBody?
-    public var request: Request?
-    public var formatName: String!
-    public var successHandler: SuccessHandler?
-    public var failureHandler: FailureHandler?
-    public var progressHandler: ProgressHandler?
-    public var cache: Cache<NSData> = Shared.fileCache
+    open var url: URLConvertible?
+    open var URLRequest: URLRequestConvertible?
+    open var headers: HTTPHeaders?
+    open var body: Parameters?
+    open var request: DataRequest?
+    open var formatName: String!
+    open var successHandler: SuccessHandler?
+    open var failureHandler: FailureHandler?
+    open var progressHandler: ProgressHandler?
+    open var cache: Cache<Data> = Shared.fileCache
     
     // MARK: - Initializer
-    public init(key: String? = nil, URL: URLStringConvertible, headers: HttpHeaders? = nil, body: HttpBody? = nil, formatName: String = HanekeGlobals.Cache.OriginalFormatName) {
-        super.init(key: key == nil ? URL.URLString : key!)
-        self.URL = URL
+    public init?(key: String? = nil, url: URLConvertible, headers: HTTPHeaders? = nil, body: Parameters? = nil, formatName: String = HanekeGlobals.Cache.OriginalFormatName) {
+        var urlString: String!
+        do {
+            urlString = try url.asURL().absoluteString
+        } catch {
+            return nil
+        }
+        super.init(key: key == nil ? urlString : key!)
+        self.url = url
         self.headers = headers
         self.body = body
         self.formatName = formatName
     }
     
-    public init(key: String? = nil, request: URLRequestConvertible, formatName: String = HanekeGlobals.Cache.OriginalFormatName) {
-        super.init(key: key == nil ? request.URLRequest.URLString : key!)
+    public init?(key: String? = nil, request: URLRequestConvertible, formatName: String = HanekeGlobals.Cache.OriginalFormatName) {
+        guard let url = request.urlRequest?.url else {
+            return nil
+        }
+        super.init(key: key == nil ? url.absoluteString : key!)
         self.URLRequest = request
         self.formatName = formatName
     }
@@ -55,42 +65,44 @@ public class FileFetcher: Fetcher<NSData> {
      - parameter failure: Failure handler block
      - parameter success: Success handler block
      */
-    public override func fetch(failure failure: FailureHandler?, success: SuccessHandler?) {
-        if URL == nil {
+    open override func fetch(failure: FailureHandler?, success: SuccessHandler?) {
+        if url == nil {
             failure?(nil)
         }
-        if URL != nil {
-            request = HttpRequest.GET(URL!, headers: headers, body: body)
+        if url != nil {
+            request = HttpRequest.GET(url!, headers: headers, body: body)
         } else if URLRequest != nil {
             request = HttpRequest.request(URLRequest!)
         }
         successHandler = success
         failureHandler = failure
-        request?.response(completionHandler: { [weak self] (request, response, data, error) in
+        request?.response(completionHandler: { [weak self] (response) in
             if let strongSelf = self {
-                if error != nil {
-                    strongSelf.failureHandler?(error)
+                guard let data = response.data else {
+                    strongSelf.failureHandler?(response.error)
                     strongSelf.request = nil
                     strongSelf.successHandler = nil
                     strongSelf.failureHandler = nil
                     strongSelf.progressHandler = nil
-                } else if data != nil {
-                    strongSelf.cache.set(value: data!, key: strongSelf.key, formatName: strongSelf.formatName, success: { (data) in
-                        strongSelf.successHandler?(data)
-                        strongSelf.request = nil
-                        strongSelf.successHandler = nil
-                        strongSelf.failureHandler = nil
-                        strongSelf.progressHandler = nil
-                    })
+                    return
                 }
+                strongSelf.cache.set(value: data, key: strongSelf.key, formatName: strongSelf.formatName, success: { (data) in
+                    strongSelf.successHandler?(data)
+                    strongSelf.request = nil
+                    strongSelf.successHandler = nil
+                    strongSelf.failureHandler = nil
+                    strongSelf.progressHandler = nil
+                })
             }
-            }).progress(progressHandler)
+            }).downloadProgress(closure: { [weak self] (progress) in
+                self?.progressHandler?(progress)
+            })
     }
     
     /**
      Cancel fetching
      */
-    public override func cancelFetch() {
+    open override func cancelFetch() {
         request?.cancel()
         successHandler = nil
         failureHandler = nil
@@ -112,9 +124,10 @@ public extension Cache {
      - paramater success: Success handler block
      - returns: FileFetcher instance
      */
-    public func fetchFile(URL: URLStringConvertible, headers: HttpHeaders? = nil, body: HttpBody? = nil, formatName: String, failure: FileFetcher.FailureHandler, success: FileFetcher.SuccessHandler) -> FileFetcher {
-        let fetcher = FileFetcher(URL: URL, headers: headers, body: body, formatName: formatName)
-        Shared.fileCache.fetch(fetcher: fetcher).onFailure(failure).onSuccess(success)
+    public func fetchFile(_ url: URLConvertible, headers: HTTPHeaders? = nil, body: Parameters? = nil, formatName: String, failure: @escaping FileFetcher.FailureHandler, success: @escaping FileFetcher.SuccessHandler) -> FileFetcher? {
+        guard let fetcher = FileFetcher(url: url, headers: headers, body: body, formatName: formatName) else {
+            return nil
+        }
         return fetcher
     }
     
@@ -126,9 +139,11 @@ public extension Cache {
      - paramater success: Success handler block
      - returns: FileFetcher instance
      */
-    public func fetchFile(request: URLRequestConvertible, formatName: String, failure: FileFetcher.FailureHandler, success: FileFetcher.SuccessHandler) -> FileFetcher {
-        let fetcher = FileFetcher(request: request, formatName: formatName)
-        Shared.fileCache.fetch(fetcher: fetcher).onFailure(failure).onSuccess(success)
+    public func fetchFile(_ request: URLRequestConvertible, formatName: String, failure: @escaping FileFetcher.FailureHandler, success: @escaping FileFetcher.SuccessHandler) -> FileFetcher? {
+        guard let fetcher = FileFetcher(request: request, formatName: formatName) else {
+            return nil
+        }
+        _ = Shared.fileCache.fetch(fetcher: fetcher).onFailure(failure).onSuccess(success)
         return fetcher
     }
     
@@ -138,10 +153,10 @@ public extension Cache {
 public extension Shared {
     
     // MARK: Shared file cache instance
-    public static var fileCache : Cache<NSData> {
+    public static var fileCache : Cache<Data> {
         struct Static {
             static let name = "shared-file"
-            static let cache = Cache<NSData>(name: name)
+            static let cache = Cache<Data>(name: name)
         }
         return Static.cache
     }
