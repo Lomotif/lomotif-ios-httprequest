@@ -60,7 +60,7 @@ public protocol Downloadable {
      
      - parameter url: An URL to the downloaded file if available
      */
-    @objc optional func downloadTask(_ task: DownloadTask, completedWithFileURL URL: URL)
+    @objc optional func downloadTask(_ task: DownloadTask, completedWithFileUrl url: URL)
     
 }
 
@@ -107,20 +107,20 @@ open class DownloadTask: ConcurrentOperation {
     open weak var delegate: DownloadTaskDelegate?
     
     public init?(downloadable: Downloadable, delegate: DownloadTaskDelegate? = nil) {
-        guard let URL = downloadable.downloadUrl() else {
+        guard let url = downloadable.downloadUrl() else {
             return nil
         }
         super.init()
         self.destinationPathUrl = downloadable.downloadFilePathUrl()
         if self.destinationPathUrl == nil {
-            if let destinationURL = DownloadManager.downloadFolderUrl()?.appendingPathComponent(URL.lastPathComponent) {
-                self.destinationPathUrl = destinationURL
+            if let destinationUrl = DownloadManager.downloadFolderUrl()?.appendingPathComponent(url.lastPathComponent) {
+                self.destinationPathUrl = destinationUrl
             } else {
                 return nil
             }
         }
         self.id = downloadable.downloadID()
-        self.sourceUrl = URL
+        self.sourceUrl = url
         self.delegate = delegate
     }
     
@@ -141,7 +141,7 @@ open class DownloadTask: ConcurrentOperation {
         super.start()
         if FileManager.default.fileExists(atPath: self.destinationPathUrl!.path) && !self.shouldOverwrite {
             self.completeOperation()
-            self.delegate?.downloadTask?(self, completedWithFileURL: self.destinationPathUrl!)
+            self.delegate?.downloadTask?(self, completedWithFileUrl: self.destinationPathUrl!)
             return
         }
         // start background downloading task
@@ -185,7 +185,7 @@ open class DownloadTask: ConcurrentOperation {
                     try FileManager.default.removeItem(atPath: self.destinationPathUrl.path)
                 }
                 try FileManager.default.moveItem(atPath: self.temporaryPathUrl().path, toPath: self.destinationPathUrl.path)
-                self.delegate?.downloadTask?(self, completedWithFileURL: self.destinationPathUrl)
+                self.delegate?.downloadTask?(self, completedWithFileUrl: self.destinationPathUrl)
             } catch let error {
                 self.delegate?.downloadTask?(self, failedWithError: error as NSError)
             }
