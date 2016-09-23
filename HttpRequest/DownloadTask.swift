@@ -24,14 +24,14 @@ public protocol Downloadable {
      
      - returns: URL to fetch the file
      */
-    func downloadURL() -> URL?
+    func downloadUrl() -> URL?
     
     /**
      Ask the delegate to provide download destination URL
      
      - returns: URL on disk to download the file to
      */
-    func downloadFilePathURL() -> URL?
+    func downloadFilePathUrl() -> URL?
     
 }
 
@@ -107,11 +107,11 @@ open class DownloadTask: ConcurrentOperation {
     open weak var delegate: DownloadTaskDelegate?
     
     public init?(downloadable: Downloadable, delegate: DownloadTaskDelegate? = nil) {
-        guard let URL = downloadable.downloadURL() else {
+        guard let URL = downloadable.downloadUrl() else {
             return nil
         }
         super.init()
-        self.destinationPathUrl = downloadable.downloadFilePathURL()
+        self.destinationPathUrl = downloadable.downloadFilePathUrl()
         if self.destinationPathUrl == nil {
             if let destinationURL = DownloadManager.downloadFolderUrl()?.appendingPathComponent(URL.lastPathComponent) {
                 self.destinationPathUrl = destinationURL
