@@ -50,7 +50,7 @@ open class HttpRequest: NSObject {
     /**
      HttpRequest shared instance
      */
-    open class func sharedInstance() -> HttpRequest {
+    open class func shared() -> HttpRequest {
         struct Singleton {
             static let instance = HttpRequest()
         }
@@ -61,21 +61,21 @@ open class HttpRequest: NSObject {
      Set client authorization headers
      */
     open class func setAuthorizationHeader(_ headers: HTTPHeaders) {
-        sharedInstance().authorizationHeaders = headers
+        shared().authorizationHeaders = headers
     }
     
     /**
      Set client agent headers headers
      */
     open class func setAgentHeader(_ headers: HTTPHeaders) {
-        sharedInstance().agentHeaders = headers
+        shared().agentHeaders = headers
     }
     
     /**
      Set client agent headers headers
      */
     open class func setRefererHeader(_ headers: HTTPHeaders) {
-        sharedInstance().refererHeaders = headers
+        shared().refererHeaders = headers
     }
     
     /**
@@ -89,11 +89,11 @@ open class HttpRequest: NSObject {
      - returns: A request instance
      */
     open class func request(_ method: HTTPMethod = .get, _ URLString: URLConvertible, headers: HTTPHeaders? = nil, body: Parameters? = nil, requiredAuthorization: Bool = false) -> DataRequest {
-        let encoding: ParameterEncoding = method == .get ? URLEncoding(destination: .httpBody) : JSONEncoding(options: .prettyPrinted)
+        let encoding: ParameterEncoding = method == .get ? URLEncoding(destination: .queryString) : JSONEncoding(options: .prettyPrinted)
         var requestHeaders: HTTPHeaders = self.buildRequestHeader(requiredAuthorization)
         requestHeaders.append(headers)
         log.debug("Url: \(URLString), Method: \(method) \nHeader: \(requestHeaders)\nParameters: \(body)")
-        return sharedInstance().alamofireManager.request(URLString, method: method, parameters: body, encoding: encoding, headers: requestHeaders)
+        return shared().alamofireManager.request(URLString, method: method, parameters: body, encoding: encoding, headers: requestHeaders)
     }
     
     /**
@@ -103,7 +103,7 @@ open class HttpRequest: NSObject {
      - returns: A request instance
      */
     open class func request(_ request: URLRequestConvertible) -> DataRequest {
-        return sharedInstance().alamofireManager.request(request)
+        return shared().alamofireManager.request(request)
     }
     
     /**
@@ -167,12 +167,12 @@ open class HttpRequest: NSObject {
     open class func buildRequestHeader(_ requiredAuthorization: Bool) -> HTTPHeaders {
         var requestHeaders: HTTPHeaders!
         if requiredAuthorization {
-            requestHeaders = sharedInstance().authorizationHeaders
-            requestHeaders.append(sharedInstance().agentHeaders)
-            requestHeaders.append(sharedInstance().refererHeaders)
+            requestHeaders = shared().authorizationHeaders
+            requestHeaders.append(shared().agentHeaders)
+            requestHeaders.append(shared().refererHeaders)
         } else {
-            requestHeaders = sharedInstance().agentHeaders
-            requestHeaders.append(sharedInstance().refererHeaders)
+            requestHeaders = shared().agentHeaders
+            requestHeaders.append(shared().refererHeaders)
         }
         return requestHeaders
     }
