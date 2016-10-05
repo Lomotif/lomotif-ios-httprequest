@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
     s.framework = 'Foundation'
     s.dependency 'Alamofire'
     s.dependency 'HanekeSwift'
-    s.dependency 'XCGLogger'
+    s.dependency 'SwiftyBeaver'
     s.source_files = "HttpRequest/*.{h,swift}"
     s.module_name = 'HttpRequest'
 
