@@ -3,7 +3,7 @@ use_frameworks!
 
 def shared_pods
     pod 'Alamofire', :git => 'https://github.com/Lomotif/Alamofire.git'
-    pod 'XCGLogger', :git => 'https://github.com/DaveWoodCom/XCGLogger.git', :branch => 'swift_3.0'
+    pod 'SwiftyBeaver'
 end
 
 target 'HttpRequest' do

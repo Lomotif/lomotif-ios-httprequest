@@ -1,12 +1,12 @@
 PODS:
   - Alamofire (4.0.1)
   - HanekeSwift (0.10.1)
-  - XCGLogger (4.0.0-beta.4)
+  - SwiftyBeaver (1.0.3)
 
 DEPENDENCIES:
   - Alamofire (from `https://github.com/Lomotif/Alamofire.git`)
   - HanekeSwift (from `https://github.com/jasonnoahchoi/HanekeSwift`, branch `swift3`)
-  - XCGLogger (from `https://github.com/DaveWoodCom/XCGLogger.git`, branch `swift_3.0`)
+  - SwiftyBeaver
 
 EXTERNAL SOURCES:
   Alamofire:
@@ -14,9 +14,6 @@ EXTERNAL SOURCES:
   HanekeSwift:
     :branch: swift3
     :git: https://github.com/jasonnoahchoi/HanekeSwift
-  XCGLogger:
-    :branch: swift_3.0
-    :git: https://github.com/DaveWoodCom/XCGLogger.git
 
 CHECKOUT OPTIONS:
   Alamofire:
@@ -25,15 +22,12 @@ CHECKOUT OPTIONS:
   HanekeSwift:
     :commit: 8571f0285ae7daa578866e50bc36cc85946e9ae8
     :git: https://github.com/jasonnoahchoi/HanekeSwift
-  XCGLogger:
-    :commit: f7d6bea1924424157d70cb78b120cb576d5f99a8
-    :git: https://github.com/DaveWoodCom/XCGLogger.git
 
 SPEC CHECKSUMS:
   Alamofire: d8ab1487ca8accacde5d0c65ae8144bdf9a264b8
   HanekeSwift: 4113367892828e7700d24a384027de6ebc79aad1
-  XCGLogger: dca27c8c2a218a9c176917680d891c8fdf9d4484
+  SwiftyBeaver: e42a664ffbdb5ec68ce968ffd3c54f619c92e0d7
 
-PODFILE CHECKSUM: a92d7ee58646c17f674ce6275432a45ff5a5467d
+PODFILE CHECKSUM: cd63b5a25f9ed0cefd992cdc34cf91b330ad18f0
 
-COCOAPODS: 1.0.1
+COCOAPODS: 1.1.0.rc.2

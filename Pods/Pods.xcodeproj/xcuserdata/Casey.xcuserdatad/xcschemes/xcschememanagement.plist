@@ -24,7 +24,7 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>XCGLogger.xcscheme</key>
+		<key>SwiftyBeaver.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -32,7 +32,7 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>05094CC4A047119F7ADC14EE74C4881C</key>
+		<key>243F77CB11F2E6BA35A581E55CB94AFC</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -42,42 +42,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>36E19C8BE4136B1B446EA02C831E198C</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>4820AD717D65D7190F4FBF0EF3CBD16B</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>79C040AFDDCE1BCBF6D8B5EB0B85887F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>7DDF79495F24B309AF089ACC99FC1151</key>
+		<key>84F886519B3E0DC3B2E9A15896B00867</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>7F41298775220B4A59C1A25FDF5FC7AA</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>99A8AA4D206E887F4DB3F9EC7045FAA6</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>B7D27720C84C61A3B983ECE889A6B6A1</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>D9A27A91594C9B1DA38423E0FFEFEA81</key>
+		<key>8A33F52C2EF2A9514DE2C1CA9DE04D53</key>
 		<dict>
 			<key>primary</key>
 			<true/>

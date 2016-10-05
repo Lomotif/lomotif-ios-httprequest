@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C923B9591DA4B3F4002E92CC /* HttpRequest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C923B9541DA4B386002E92CC /* HttpRequest.framework */; };
+		C923B95A1DA4B411002E92CC /* HttpRequest.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C923B9541DA4B386002E92CC /* HttpRequest.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		C97D460F1CCC676300CE72BD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97D460E1CCC676300CE72BD /* AppDelegate.swift */; };
 		C97D46111CCC676300CE72BD /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97D46101CCC676300CE72BD /* ViewController.swift */; };
 		C97D46141CCC676300CE72BD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C97D46121CCC676300CE72BD /* Main.storyboard */; };
@@ -14,13 +16,30 @@
 		C97D46191CCC676300CE72BD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C97D46171CCC676300CE72BD /* LaunchScreen.storyboard */; };
 		C97D46241CCC676300CE72BD /* HttpRequestExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97D46231CCC676300CE72BD /* HttpRequestExampleTests.swift */; };
 		C97D462F1CCC676300CE72BD /* HttpRequestExampleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97D462E1CCC676300CE72BD /* HttpRequestExampleUITests.swift */; };
-		C97D464B1CCC691C00CE72BD /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C97D464A1CCC691C00CE72BD /* XCGLogger.framework */; };
-		C97D464D1CCC696B00CE72BD /* HttpRequest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C97D464C1CCC696B00CE72BD /* HttpRequest.framework */; };
-		C97D464F1CCC697500CE72BD /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C97D464E1CCC697500CE72BD /* Alamofire.framework */; };
-		C97D46511CCC697800CE72BD /* AlamofireImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C97D46501CCC697800CE72BD /* AlamofireImage.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		C923B9531DA4B386002E92CC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C923B94E1DA4B386002E92CC /* HttpRequest.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C9C1E96E1CCAAD5000D361A8;
+			remoteInfo = HttpRequest;
+		};
+		C923B9551DA4B386002E92CC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C923B94E1DA4B386002E92CC /* HttpRequest.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C9C1E9781CCAAD5100D361A8;
+			remoteInfo = HttpRequestTests;
+		};
+		C923B9571DA4B38C002E92CC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C923B94E1DA4B386002E92CC /* HttpRequest.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = C9C1E96D1CCAAD5000D361A8;
+			remoteInfo = HttpRequest;
+		};
 		C97D46201CCC676300CE72BD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = C97D46031CCC676300CE72BD /* Project object */;
@@ -37,7 +56,22 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		C923B9471DA4B308002E92CC /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				C923B95A1DA4B411002E92CC /* HttpRequest.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		C923B94E1DA4B386002E92CC /* HttpRequest.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = HttpRequest.xcodeproj; path = ../HttpRequest.xcodeproj; sourceTree = "<group>"; };
 		C97D460B1CCC676300CE72BD /* HttpRequestExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HttpRequestExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C97D460E1CCC676300CE72BD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C97D46101CCC676300CE72BD /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -52,10 +86,6 @@
 		C97D462E1CCC676300CE72BD /* HttpRequestExampleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpRequestExampleUITests.swift; sourceTree = "<group>"; };
 		C97D46301CCC676300CE72BD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C97D46481CCC68AD00CE72BD /* Pods_HttpRequest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Pods_HttpRequest.framework; path = "../../../Library/Developer/Xcode/DerivedData/HttpRequest-dgwcbeajtaywftcvjkrhmaeuzjpr/Build/Products/Debug-iphonesimulator/Pods_HttpRequest.framework"; sourceTree = "<group>"; };
-		C97D464A1CCC691C00CE72BD /* XCGLogger.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCGLogger.framework; path = "../../../Library/Developer/Xcode/DerivedData/HttpRequest-dgwcbeajtaywftcvjkrhmaeuzjpr/Build/Products/Debug-iphonesimulator/XCGLogger.framework"; sourceTree = "<group>"; };
-		C97D464C1CCC696B00CE72BD /* HttpRequest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HttpRequest.framework; path = "../../../Library/Developer/Xcode/DerivedData/HttpRequest-dgwcbeajtaywftcvjkrhmaeuzjpr/Build/Products/Debug-iphonesimulator/HttpRequest.framework"; sourceTree = "<group>"; };
-		C97D464E1CCC697500CE72BD /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = "../../../Library/Developer/Xcode/DerivedData/HttpRequest-dgwcbeajtaywftcvjkrhmaeuzjpr/Build/Products/Debug-iphonesimulator/Alamofire.framework"; sourceTree = "<group>"; };
-		C97D46501CCC697800CE72BD /* AlamofireImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AlamofireImage.framework; path = "../../../Library/Developer/Xcode/DerivedData/HttpRequest-dgwcbeajtaywftcvjkrhmaeuzjpr/Build/Products/Debug-iphonesimulator/AlamofireImage.framework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,10 +93,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C97D46511CCC697800CE72BD /* AlamofireImage.framework in Frameworks */,
-				C97D464F1CCC697500CE72BD /* Alamofire.framework in Frameworks */,
-				C97D464D1CCC696B00CE72BD /* HttpRequest.framework in Frameworks */,
-				C97D464B1CCC691C00CE72BD /* XCGLogger.framework in Frameworks */,
+				C923B9591DA4B3F4002E92CC /* HttpRequest.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -87,18 +114,32 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C923B9481DA4B329002E92CC /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C923B94E1DA4B386002E92CC /* HttpRequest.xcodeproj */,
+				C97D46481CCC68AD00CE72BD /* Pods_HttpRequest.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C923B94F1DA4B386002E92CC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C923B9541DA4B386002E92CC /* HttpRequest.framework */,
+				C923B9561DA4B386002E92CC /* HttpRequestTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		C97D46021CCC676300CE72BD = {
 			isa = PBXGroup;
 			children = (
-				C97D46501CCC697800CE72BD /* AlamofireImage.framework */,
-				C97D464E1CCC697500CE72BD /* Alamofire.framework */,
-				C97D464C1CCC696B00CE72BD /* HttpRequest.framework */,
-				C97D464A1CCC691C00CE72BD /* XCGLogger.framework */,
-				C97D46481CCC68AD00CE72BD /* Pods_HttpRequest.framework */,
 				C97D460D1CCC676300CE72BD /* HttpRequestExample */,
 				C97D46221CCC676300CE72BD /* HttpRequestExampleTests */,
 				C97D462D1CCC676300CE72BD /* HttpRequestExampleUITests */,
 				C97D460C1CCC676300CE72BD /* Products */,
+				C923B9481DA4B329002E92CC /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -153,10 +194,12 @@
 				C97D46071CCC676300CE72BD /* Sources */,
 				C97D46081CCC676300CE72BD /* Frameworks */,
 				C97D46091CCC676300CE72BD /* Resources */,
+				C923B9471DA4B308002E92CC /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				C923B9581DA4B38C002E92CC /* PBXTargetDependency */,
 			);
 			name = HttpRequestExample;
 			productName = HttpRequestExample;
@@ -233,6 +276,12 @@
 			mainGroup = C97D46021CCC676300CE72BD;
 			productRefGroup = C97D460C1CCC676300CE72BD /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = C923B94F1DA4B386002E92CC /* Products */;
+					ProjectRef = C923B94E1DA4B386002E92CC /* HttpRequest.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				C97D460A1CCC676300CE72BD /* HttpRequestExample */,
@@ -241,6 +290,23 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		C923B9541DA4B386002E92CC /* HttpRequest.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = HttpRequest.framework;
+			remoteRef = C923B9531DA4B386002E92CC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		C923B9561DA4B386002E92CC /* HttpRequestTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = HttpRequestTests.xctest;
+			remoteRef = C923B9551DA4B386002E92CC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		C97D46091CCC676300CE72BD /* Resources */ = {
@@ -298,6 +364,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		C923B9581DA4B38C002E92CC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = HttpRequest;
+			targetProxy = C923B9571DA4B38C002E92CC /* PBXContainerItemProxy */;
+		};
 		C97D46211CCC676300CE72BD /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = C97D460A1CCC676300CE72BD /* HttpRequestExample */;
@@ -424,6 +495,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.lomotif.HttpRequestExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -436,6 +508,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.lomotif.HttpRequestExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -447,6 +520,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.lomotif.HttpRequestExampleTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HttpRequestExample.app/HttpRequestExample";
 			};
 			name = Debug;
@@ -459,6 +533,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.lomotif.HttpRequestExampleTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HttpRequestExample.app/HttpRequestExample";
 			};
 			name = Release;
@@ -470,6 +545,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.lomotif.HttpRequestExampleUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = HttpRequestExample;
 			};
 			name = Debug;
@@ -481,6 +557,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.lomotif.HttpRequestExampleUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = HttpRequestExample;
 			};
 			name = Release;

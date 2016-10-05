@@ -8,23 +8,10 @@
 
 import Foundation
 import Alamofire
-import XCGLogger
+import SwiftyBeaver
 
-// XCGLogger
-let log: XCGLogger = {
-    let instance = XCGLogger.default
-// Plug-ins do not work in Xcode 8
-//    instance.xcodeColorsEnabled = true // Or set the XcodeColors environment variable in your scheme to YES
-//    instance.xcodeColors = [
-//        .verbose: .lightGrey,
-//        .debug: .darkGrey,
-//        .info: .darkGreen,
-//        .warning: .orange,
-//        .error: XCGLogger.XcodeColor(fg: UIColor.red), // Optionally use a UIColor
-//        .severe: XCGLogger.XcodeColor(fg: (255, 255, 255), bg: (255, 0, 0)) // Optionally use RGB values directly
-//    ]
-    return instance
-}()
+// SwiftyBeaver
+public let log = SwiftyBeaver.self
 
 // MARK: - HttpRequest which handles all the http request call
 open class HttpRequest: NSObject {
@@ -44,6 +31,7 @@ open class HttpRequest: NSObject {
     public override init() {
         super.init()
         alamofireManager = Alamofire.SessionManager(configuration: HttpRequest.configurationWithTimeoutInterval(timeoutInterval))
+        log.addDestination(ConsoleDestination())
     }
     
     // MARK: - Functions

@@ -228,11 +228,11 @@ Apache License
    See the License for the specific language governing permissions and
    limitations under the License.
 
-## XCGLogger
+## SwiftyBeaver
 
 The MIT License (MIT)
 
-Copyright (c) 2014 Dave Wood, Cerebral Gardens http://www.cerebralgardens.com/
+Copyright (c) 2015 Sebastian Kreutzberger
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
