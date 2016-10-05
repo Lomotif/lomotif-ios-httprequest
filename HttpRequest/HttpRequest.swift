@@ -11,7 +11,7 @@ import Alamofire
 import SwiftyBeaver
 
 // SwiftyBeaver
-public let log = SwiftyBeaver.self
+let log = SwiftyBeaver.self
 
 // MARK: - HttpRequest which handles all the http request call
 open class HttpRequest: NSObject {
