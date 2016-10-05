@@ -31,7 +31,6 @@ open class HttpRequest: NSObject {
     public override init() {
         super.init()
         alamofireManager = Alamofire.SessionManager(configuration: HttpRequest.configurationWithTimeoutInterval(timeoutInterval))
-        log.addDestination(ConsoleDestination())
     }
     
     // MARK: - Functions
