@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		A95304F03F84A2A84A37483C /* Pods_HttpRequestTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FB2449618F779D690F17C2A /* Pods_HttpRequestTests.framework */; };
+		C93BE2361DE2D63100B3ADAD /* UploadTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93BE2351DE2D63100B3ADAD /* UploadTask.swift */; };
 		C97D46531CCD7C8700CE72BD /* FileFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97D46521CCD7C8700CE72BD /* FileFetcher.swift */; };
 		C9C1E9721CCAAD5100D361A8 /* HttpRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = C9C1E9711CCAAD5100D361A8 /* HttpRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C9C1E9791CCAAD5100D361A8 /* HttpRequest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9C1E96E1CCAAD5000D361A8 /* HttpRequest.framework */; };
@@ -35,6 +36,7 @@
 		3FB2449618F779D690F17C2A /* Pods_HttpRequestTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HttpRequestTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D5E612E47A1348DBD028712 /* Pods-HttpRequest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HttpRequest.debug.xcconfig"; path = "Pods/Target Support Files/Pods-HttpRequest/Pods-HttpRequest.debug.xcconfig"; sourceTree = "<group>"; };
 		A6ED544452141253BC12F12F /* Pods-HttpRequestTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HttpRequestTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-HttpRequestTests/Pods-HttpRequestTests.debug.xcconfig"; sourceTree = "<group>"; };
+		C93BE2351DE2D63100B3ADAD /* UploadTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UploadTask.swift; sourceTree = "<group>"; };
 		C97D46521CCD7C8700CE72BD /* FileFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileFetcher.swift; sourceTree = "<group>"; };
 		C9C1E96E1CCAAD5000D361A8 /* HttpRequest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HttpRequest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9C1E9711CCAAD5100D361A8 /* HttpRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HttpRequest.h; sourceTree = "<group>"; };
@@ -92,6 +94,14 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		C93BE2341DE2D61D00B3ADAD /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+				C93BE2351DE2D63100B3ADAD /* UploadTask.swift */,
+			);
+			name = "New Group";
+			sourceTree = "<group>";
+		};
 		C9C1E9641CCAAD5000D361A8 = {
 			isa = PBXGroup;
 			children = (
@@ -118,6 +128,7 @@
 				C9C1E9711CCAAD5100D361A8 /* HttpRequest.h */,
 				C9C1E9891CCACD5900D361A8 /* HttpRequest.swift */,
 				C9C1E9981CCAF86A00D361A8 /* Shared */,
+				C93BE2341DE2D61D00B3ADAD /* New Group */,
 				C9C1E9951CCAE37200D361A8 /* Download */,
 				C9C1E98D1CCAD40D00D361A8 /* DictionaryExtension.swift */,
 				C9C1E9731CCAAD5100D361A8 /* Info.plist */,
@@ -346,6 +357,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C9C1E9941CCAE36D00D361A8 /* DownloadTask.swift in Sources */,
+				C93BE2361DE2D63100B3ADAD /* UploadTask.swift in Sources */,
 				C9C1E98A1CCACD5900D361A8 /* HttpRequest.swift in Sources */,
 				C9C1E9971CCAE3A300D361A8 /* ConcurrentOperation.swift in Sources */,
 				C9C1E9921CCAE34B00D361A8 /* DownloadManager.swift in Sources */,
