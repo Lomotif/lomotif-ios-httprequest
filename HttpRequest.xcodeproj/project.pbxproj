@@ -94,12 +94,12 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
-		C93BE2341DE2D61D00B3ADAD /* New Group */ = {
+		C93BE2341DE2D61D00B3ADAD /* Upload */ = {
 			isa = PBXGroup;
 			children = (
 				C93BE2351DE2D63100B3ADAD /* UploadTask.swift */,
 			);
-			name = "New Group";
+			name = Upload;
 			sourceTree = "<group>";
 		};
 		C9C1E9641CCAAD5000D361A8 = {
@@ -128,7 +128,7 @@
 				C9C1E9711CCAAD5100D361A8 /* HttpRequest.h */,
 				C9C1E9891CCACD5900D361A8 /* HttpRequest.swift */,
 				C9C1E9981CCAF86A00D361A8 /* Shared */,
-				C93BE2341DE2D61D00B3ADAD /* New Group */,
+				C93BE2341DE2D61D00B3ADAD /* Upload */,
 				C9C1E9951CCAE37200D361A8 /* Download */,
 				C9C1E98D1CCAD40D00D361A8 /* DictionaryExtension.swift */,
 				C9C1E9731CCAAD5100D361A8 /* Info.plist */,
